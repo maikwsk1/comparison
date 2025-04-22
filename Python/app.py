@@ -21,13 +21,23 @@ count = 0
 
 #ゲームスタートボタン：食べたいものをランダムに宣言
 #AIに一度も聞かずに書いたコード
-@app.route('/start',methods=['POST'])
+@app.route('/start',methods=['POST', 'GET'])
 def start():
-    food_options = None
     food_options = ['焼きとうもろこし','かまぼこ']
-    random_food_option = random.choice(food_options)
-    character_demand = "私は" + random_food_option + "が食べたいです。"
+    character_demand="主人公が食べたいものを表示します"
+    if request.method == 'POST':
+        random_food_option = random.choice(food_options)
+        character_demand = "私は" + random_food_option + "が食べたいです。"
     return character_demand
+
+@app.route('/contact_staff', methods=['GET', 'POST'])
+def contact_staff():
+    food_id = request.form.get("food_id", None)
+
+    if not food_id:
+        return "何が欲しいの？"
+
+    return f"あなたは {food_id} が欲しいのですね。"
 
 #欲しいものを入力
 @app.route('/', methods=['GET', 'POST'])
@@ -35,23 +45,36 @@ def food_input():
     food_options = ['焼きとうもろこし','かまぼこ']
     food_id = None
     if request.method == 'POST':
-        food_id = request.form.get('food_id', '')
-    return render_template('index.html', food_id=food_id, food_optiond=food_options)
+        food_id = request.form.get('food_id', None)
+    return render_template('index.html', food_id=food_id, food_options=food_options)
 
-#魚屋さん：会話
-@app.route('/fish_people', methods=['POST'])
-def fish_people():
-    food_id = request.form.get("food_id","")
-    fish_people_word1 = "魚専門屋さんです。何が欲しいの？"
-        # ユーザーの入力に応じてメッセージを更新
-    if food_id:
-        if food_id == "かまぼこ":
-            fish_people_word1 = "かまぼこが欲しいのなら魚と金槌を持ってきてね。"
-        else:
-            fish_people_word1 = f"申し訳ないですが、{food_id} は売っていません。"
-    return fish_people_word1
 
-@app.route('/submit',methods=['POST'])
+@app.route('/contact_staff', methods=['GET'])
+def person_fish():
+    if request.method == 'GET':
+      food_id = request.form.get("food_id", None)
+
+      if food_id is None:
+        return "魚専門屋さんです。何が欲しいの？"
+
+      if food_id == "かまぼこ":
+        return "かまぼこが欲しいのなら魚と金槌を持ってきてね。"
+      else:
+        return f"申し訳ないですが、{food_id} は売っていません。"
+
+@app.route('/ask_person_vegetables', methods=['GET', 'POST'])
+def person_vegetables():
+    food_id = request.form.get("food_id", None)
+    if request.method == 'POST':
+      if food_id is None:
+        return "八百屋さんです。何が欲しいの？"
+    if request.method == 'GET':
+      if food_id == "焼きとうもろこし":
+        return "焼きとうもろこしが欲しいのならとうもろこしと火を持ってきてね。"
+      else:
+        return f"申し訳ないですが、{food_id} は売っていません。"
+
+@app.route('/submit',methods=['GET', 'POST'])
 def submit():
     food = None
     if request.method == 'POST':
@@ -66,6 +89,8 @@ def submit():
 def about():
     food_options = ['焼きとうもろこし','かまぼこ']
     return render_template('about.html',food_options=food_options)
+
+
 
 #カウント変数の定義
 @app.route("/count", methods=["GET"])
