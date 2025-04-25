@@ -6,8 +6,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
 <body>
+    <div id="view-container"></div>
+
     <!--ゲームの流れの説明文-->
-    <h1>Gama Flow</h1>
+    <h1>Game Flow</h1>
     <ol>
         <li>Player Characterが食べたいものを教えてくれる：かまぼこ</li>
         <li>その食べ物の専門屋さんへ行く：魚屋さん</li>
@@ -22,32 +24,22 @@
     </ol>
 
     <!--ゲームのスタート設定-->
-    <h1>Gama Screen</h1>
-    <div><input onclick="start()" type="submit" value="ゲームスタート"></div>
-
+    <h1>Game Screen</h1>
+    <div>
+        <input onclick="start(); resetSource();" type="submit" value="ゲームスタート">
+    </div>
     <!--主人公-->
     <div>
         <h2>Player Character</h2>
         <img onclick="increment()" src="static/images/Character.png" width="100" , height="100" />
-        <p id="character_demand" /p>
+        <p id="character_demand"></p>
     </div>
-
-    <h2>Expert Staff</h2>
-    <div class="expert_staff">
-        <div><!--魚屋さん-->
-            <img onclick="person_fish()" src="static/images/person_fish.png" width="100" height="100" />
-        </div>
-        <div>
-            <img onclick="person_vegetables()" src="static\images\person_vegetables.png" width="100" height="100" />
-        </div>
-    </div>
-
-
 
     <!--何が欲しいか入力-->
     <div>
         <h2>My Opinion</h2>
         <form method="POST" action="/contact_staff">
+            <input type="hidden" name="source" id="source_input">
             <label for="food_id">ここに欲しいものを入力して:</label>
             <input id="food_id" name="food_id" placeholder="食べ物の名前" type="text">
             <button type="submit" class="btn btn-primary">決定</button>
@@ -56,6 +48,20 @@
         <p>{{food_id}}</p>
         {% endif %}
         <!---->
+    </div>
+
+    <!--専門店のスタッフ-->
+    <h2>Expert Staff</h2>
+    <div class="expert_staff">
+        <div>
+            <a href="/contact_staff?source=fish"><img onclick="person_fish()" src="static/images/person_fish.png"
+                    width="100" height="100" /></a>
+
+        </div>
+        <div>
+            <a href="/contact_staff?source=vegetables"><img onclick="person_vegetables()"
+                    src="static/images/person_vegetables.png" width="100" height="100" /></a>
+        </div>
     </div>
 
     <p>カウント：<span id="count">0</span></p>
@@ -73,7 +79,14 @@
     <p>選択された食べ物：{{food}}</p>
     {% endif %}
 
+
     <script>
+        function resetSource() {
+            localStorage.removeItem("selectedSource");  // ✅ ソースを削除
+            document.getElementById("source_input").value = ""; // ✅ フォームの値をクリア
+            alert("店舗の選択をリセットしました！"); // ✅ ユーザーに通知
+        }
+
         async function updateCount() {
             const response = await fetch("/count");
             const data = await response.json();
@@ -91,17 +104,42 @@
         }
 
         function person_fish() {
-            fetch('/contact_staff', { method: 'GET' })
+            localStorage.setItem("selectedSource", "fish");  // ✅ 保存
+            document.getElementById("source_input").value = "fish"; // ✅ フォームの値を更新
+
+            fetch(`/contact_staff?source=fish`, { method: 'GET' })
                 .then(response => response.text())
-                .then(data => document.getElementById("talk").innerHTML = data);
-            window.location.href = "/contact_staff";  // ページ遷移する
+                .then(data => {
+                    document.getElementById("view-container").innerHTML = data;
+                })
+                .then(() => {
+                    window.location.href = "/contact_staff?source=fish"; // ✅ 画面遷移
+                })
+                .catch(error => console.error("❌ Fetch error:", error));
         }
 
         function person_vegetables() {
-            fetch('/ask_person_vegetables', { method: 'POST' })
+            localStorage.setItem("selectedSource", "vegetables");  // ✅ 保存
+            document.getElementById("source_input").value = "vegetables"; // ✅ フォームの値を更新
+
+            fetch(`/contact_staff?source=vegetables`, { method: 'GET' })
                 .then(response => response.text())
-                .then(data => document.getElementById("talk").innerText = data);
+                .then(data => {
+                    document.getElementById("view-container").innerHTML = data;
+                })
+                .then(() => {
+                    window.location.href = "/contact_staff?source=vegetables"; // ✅ 画面遷移
+                })
+                .catch(error => console.error("❌ Fetch error:", error));
         }
+        document.addEventListener("DOMContentLoaded", function () {
+            let storedSource = localStorage.getItem("selectedSource"); // ✅ 以前の選択を取得
+
+            if (storedSource) {
+                document.getElementById("source_input").value = storedSource; // ✅ フォームにセット
+            }
+        });
+
         function start() {
             fetch('/start', { method: 'POST' })
                 .then(response => response.text())
