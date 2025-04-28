@@ -14,8 +14,24 @@
     <button type="button" onclick="window.location.href='http://127.0.0.1:5000/chef'">シェフのページへ</button>
 
 
+
+
+
+    {% if chef_cooking %}
+    <p><img src="static/images/chef_cooking.png" <p><img src="static/images/firecorn.png" width="200" height="200"></p>
+    <p>{{ chef_cooking }}</p>
+    {% else %}
     <h2>Chefのページ</h2>
     <p>{{ message }}</p>
+    <form action="/cooking" method="POST">
+        <button type="submit">調理お願いします。</button>
+    </form>
+    <p id="chef_cooking"></p>
+    <p>{{ chef_cooking }}</p>
+
+    {% endif %}
+
+
 </body>
 
 </html>

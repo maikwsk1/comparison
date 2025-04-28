@@ -9,21 +9,6 @@
 <body>
     <div id="view-container"></div>
 
-    <!--ゲームの流れの説明文-->
-    <h1>Game Flow</h1>
-    <ol>
-        <li>Player Characterが食べたいものを教えてくれる：かまぼこ</li>
-        <li>その食べ物の専門屋さんへ行く：魚屋さん</li>
-        <li>専門屋さんの自己紹介を聞く。何が欲しいの？と聞かれる</li>
-        <li>Player Characterに言われたものを入力する：かまぼこ</li>
-        <li>専門屋さんの選択があっていたのか返答が来る</li>
-        <li>指示どうりに材料を取りに行く：かまぼこが欲しいのなら魚と金槌を持ってきてね。</li>
-        <li>川から魚を、家から金槌を持って来る</li>
-        <li>材料を渡し、作ってもらう</li>
-        <li>作ってもらった食べ物をPlayer Characterに渡す</li>
-        <li>お礼を言われてミッションクリア</li>
-    </ol>
-
     <!--ゲームのスタート設定-->
     <h1>Game Screen</h1>
     <div>
@@ -80,6 +65,22 @@
 
     <h2>Chef</h2>
     <a href="/chef"><img onclick="chef()" src="static/images/chef.png" width="100" height="100" /></a>
+
+    <!--ゲームの流れの説明文-->
+    <h1>Game Flow</h1>
+    <ol>
+        <li>Player Characterが食べたいものを教えてくれる：かまぼこ</li>
+        <li>その食べ物の専門屋さんへ行く：魚屋さん</li>
+        <li>専門屋さんの自己紹介を聞く。何が欲しいの？と聞かれる</li>
+        <li>Player Characterに言われたものを入力する：かまぼこ</li>
+        <li>専門屋さんの選択があっていたのか返答が来る</li>
+        <li>指示どうりに材料を取りに行く：かまぼこが欲しいのなら魚と金槌を持ってきてね。</li>
+        <li>川から魚を、家から金槌を持って来る</li>
+        <li>材料を渡し、作ってもらう</li>
+        <li>作ってもらった食べ物をPlayer Characterに渡す</li>
+        <li>お礼を言われてミッションクリア</li>
+    </ol>
+
 
     <p>カウント：<span id="count">0</span></p>
     <button onclick="resetCount()">リセット </button>

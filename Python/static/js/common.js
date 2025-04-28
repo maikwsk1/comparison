@@ -1,11 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
     let storedSource = localStorage.getItem("selectedSource"); // 店舗選択のキー
-
-    // 🔄 ページロード時にデータ復元（少し遅らせる）
-    setTimeout(() => {
-        restoreData();
-    }, 100);
-
     let sourceInput = document.getElementById("source_input");
     if (storedSource && sourceInput) {
         sourceInput.value = storedSource; // 店舗選択の値を復元
@@ -55,6 +49,7 @@ function person_fish() {
 function person_vegetables() {
     localStorage.setItem("selectedSource", "vegetables");
     let sourceInput = document.getElementById("source_input");
+
     if (sourceInput) {
         sourceInput.value = "vegetables";
     }

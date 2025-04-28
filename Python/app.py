@@ -115,8 +115,6 @@ def chef():
     food_tree = session.get('food_tree', '未指定')
     tool_house = session.get('tool_house', '未指定')
 
-    print(f"🛠 chefページ表示時の food_tree={food_tree}, tool_house={tool_house}")
-
     if food_tree == "とうもろこし" and tool_house == "レンジ":
         message = "焼きとうもろこしの材料が揃ったので、作ります！"
     elif food_tree in ["とうもろこし", "レンジ"] or tool_house in ["とうもろこし", "レンジ"]:
@@ -125,6 +123,16 @@ def chef():
         message = "材料を持ってきてください。"
 
     return render_template('chef.html', message=message, food_tree=food_tree, tool_house=tool_house)
+
+
+@app.route('/cooking',methods=['GET','POST'])
+def cooking():
+    if request.method == 'GET':
+        return render_template('chef.html')
+    if request.method == 'POST':
+        chef_cooking = "調理します。"
+    return render_template('chef.html', chef_cooking=chef_cooking)
+
 
 # カウント変数の定義
 @app.route("/count", methods=["GET"])
