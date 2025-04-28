@@ -17,6 +17,8 @@ import pyautogui
 app = Flask(__name__)
 
 
+app.secret_key = "your_secret_key"  # セッションの暗号化キー（適当な文字列）
+
 # 定義
 count = 0
 
@@ -42,12 +44,11 @@ def food_input():
 @app.route('/contact_staff', methods=['GET', 'POST'])
 def contact_staff():
     if request.method == 'POST':
-        source = request.form.get("source", None)  # ✅ フォームから `source` を取得
+        source = request.form.get("source", None)  
     else:
-        source = request.args.get("source", None)  # ✅ URL から `source` を取得
+        source = request.args.get("source", None) 
 
     food_id = request.form.get("food_id", None)
-    print(f"🔍 Debug: Received source={source}, food_id={food_id}, Type={type(source)}")  # ✅ デバッグログ追加
 
     if not source:
         return "❌ 店舗が選択されていません。"
@@ -66,24 +67,64 @@ def contact_staff():
         if not food_id:
             message = "🥦 八百屋さんです。何が欲しいの？"
         elif food_id == "焼きとうもろこし":
-            message = "⭕ 焼きとうもろこしは正解です！とうもろこしと火を持ってきてね。"
+            message = "焼きとうもろこしが欲しいならとうもろこしと火を持ってきてね。"
         else:
             message = f"申し訳ないですが、{food_id} は売っていません。"
 
     return render_template('contact_staff.html', message=message)
 
-@app.route('/submit', methods=['GET', 'POST'])
-def submit():
-    food = None
-    if request.method == 'POST':
-        food = request.form.get('food', '未指定')
-        print(food)
-    return render_template('index.html', food=food)
+@app.route('/reset_session', methods=['POST'])
+def reset_session():
+    session.pop('food_tree', None)
+    session.pop('tool_house', None)
 
-@app.route('/about')
-def about():
-    food_options = ['焼きとうもろこし', 'かまぼこ']
-    return render_template('about.html', food_options=food_options)
+    print("🔄 セッションのデータがリセットされました！")
+    return "Session reset"
+
+@app.route('/finding_things', methods=['GET', 'POST'])
+def finding_things():
+    foods_tree = ['とうもろこし', 'かぶ']
+    tools_house = ['レンジ', 'オーブン']
+
+    source = request.args.get('source', 'default')
+
+    if request.method == 'POST':
+        food_tree = request.form.get('food_tree')
+        tool_house = request.form.get('tool_house')
+
+        # ✅ 修正: 値が存在する場合のみ `session` に保存
+        if food_tree:
+            session['food_tree'] = food_tree
+        if tool_house:
+            session['tool_house'] = tool_house
+
+        print(f"🔍 セッションに保存: food_tree={session.get('food_tree', '未指定')}, tool_house={session.get('tool_house', '未指定')}")
+
+    return render_template(
+        'finding_things.html', 
+        source=source, 
+        foods_tree=foods_tree, 
+        food_tree=session.get('food_tree', None), 
+        tools_house=tools_house, 
+        tool_house=session.get('tool_house', None)
+    )
+
+@app.route('/chef')
+def chef():
+    """ ✅ 修正: `session` からデータを取得し、デバッグ出力追加 """
+    food_tree = session.get('food_tree', '未指定')
+    tool_house = session.get('tool_house', '未指定')
+
+    print(f"🛠 chefページ表示時の food_tree={food_tree}, tool_house={tool_house}")
+
+    if food_tree == "とうもろこし" and tool_house == "レンジ":
+        message = "焼きとうもろこしの材料が揃ったので、作ります！"
+    elif food_tree in ["とうもろこし", "レンジ"] or tool_house in ["とうもろこし", "レンジ"]:
+        message = "まだ何かが足りていません。"
+    else:
+        message = "材料を持ってきてください。"
+
+    return render_template('chef.html', message=message, food_tree=food_tree, tool_house=tool_house)
 
 # カウント変数の定義
 @app.route("/count", methods=["GET"])
