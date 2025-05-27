@@ -2,65 +2,100 @@
 <html lang="ja">
 
 <head>
-    <meta name="description" content="サイトの概要を記載">
-    <!--CSS等のリンク-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <h2>Talk to Expert Staff</h2>
-    <p>{{ message }}</p>
-
-    <!--ホームへ移動-->
-    <button type="button" onclick="window.location.href='http://127.0.0.1:5000/'">Go to Home</button>
-
-    <!-- シェフのページへ移動 -->
-    <button type="button" onclick="window.location.href='http://127.0.0.1:5000/chef'">シェフのページへ</button>
-
-
-    {% if tool_house %}
-    <p>選択された器具：{{ tool_house }}</p>
-    {% else %}
-    <p>選択された器具：未指定</p>
-    {% endif %}
-
-    {% if food_tree %}
-    <p>選択された食べ物：{{ food_tree }}</p>
-    {% else %}
-    <p>選択された食べ物：未指定</p>
-    {% endif %}
-
-    {% if source == "house" %}
-    <img src="static/images/range.png" width="200" height="200">
-
-    <form method="POST" action="/finding_things">
-        <select class="select" name="tool_house" id="tool_house_selected">
-            {% for tool_house in tools_house %}
-            <option value="{{ tool_house }}">{{ tool_house }}</option>
+    <div class="col-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="alert alert-success">
+            {% for category, message in messages %}
+            <div>{{ message }}</div>
             {% endfor %}
-        </select>
-        <div><input type="submit" value="決定"></div>
-    </form>
+        </div>
+        {% endif %}
+        {% endwith %}
+    </div>
+    <div class="col-4">
+        <h2>食材や道具を探し中</h2>
+        <div><button type=" button" class="btn btn-outline-danger"
+                onclick="window.location.href='http://127.0.0.1:5000/'">HOMEに戻る</button></div>
+        {% if source == "house" %}
+        <h5>家の中にある道具</h5>
+        <div class="flex">
+            <div>
+                <img src="static/images/range.png" width="200" height="200">
+                <p>オーブンレンジ</p>
+            </div>
+            <div>
+                <img src="static/images/hammer.png" width="200" height="200">
+                <p>金槌</p>
+            </div>
+        </div>
+        <div class="p-3 mb-2 bg-body-secondary">
+            <h5>以下から道具を選んでください</h5>
+            <form method="POST" action="/finding_things">
+                <select class="form-select" size="3" aria-label="size 3 select example" name="tool_house"
+                    id="tool_house_selected">
+                    {% for tool_house in tools_house %}
+                    <option value="{{ tool_house }}">{{ tool_house }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" value="決定" class="btn btn-warning">決定</button>
+            </form>
+        </div>
+    </div>
+    <div class="col-4">
+        {% elif source == "tree" %}
+        <h5>森の中のもの</h5>
+        <div class="flex">
+            <div>
+                <img src="static/images/corn.png" width="200" height="200">
+                <p>とうもろこし</p>
+            </div>
+        </div>
 
-
-    {% elif source == "tree" %}
-    <img src="static/images/corn.png" width="200" height="200">
-
-    <form method="POST" action="/finding_things">
-        <select class="select" name="food_tree" id="food_tree_selected">
-            {% for food_tree in foods_tree %}
-            <option value="{{ food_tree }}">{{ food_tree }}</option>
-            {% endfor %}
-        </select>
-        <div><input type="submit" value="決定"></div>
-    </form>
-
-
-    {% elif source == "submarine" %}
-    <img src="static/images/corn.png" width="100" height="100">
-    {% endif %}
-
-
+        <h5>以下から欲しいものを選んでください</h5>
+        <form method="POST" action="/finding_things">
+            <select class="form-select" size="3" aria-label="size 3 select example" name="food_tree"
+                id="food_tree_selected">
+                {% for food_tree in foods_tree %}
+                <option value="{{ food_tree  }}">{{ food_tree }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" value="決定" class="btn btn-warning">決定</button>
+        </form>
+    </div>
+    <div class="col-4">
+        {% elif source == "submarine" %}
+        <h5>海の中のもの</h5>
+        <div class="flex">
+            <div>
+                <img src="static/images/hirame.png" width="200" height="200">
+                <p>ヒラメ</p>
+            </div>
+        </div>
+        <h5>以下から欲しいものを選んでください</h5>
+        <form method="POST" action="/finding_things">
+            <select class="form-select" size="3" aria-label="size 3 select example" name="food_fish"
+                id="food_fish_selected">
+                {% for food_fish in foods_fish %}
+                <option value="{{ food_fish }}">{{ food_fish }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" value="決定" class="btn btn-warning">決定</button>
+        </form>
+        {% endif %}
+    </div>
 </body>
 
 </html>

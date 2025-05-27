@@ -1,3 +1,165 @@
-.expert_staff{
-    display: flex;
+body{
+  padding: 30px;
+}
+.douwn{
+  margin-bottom: 10px; 
+}
+
+    .alert-success {
+        padding: 5px 10px;
     }
+#game_flow{
+  padding-top: 5px;
+}
+#enter{
+  padding-top: 10px;
+}
+.font-small{
+font-size: 13px;
+}
+.bold-text{
+font-weight: bold;
+}
+.flex{
+  display: flex;
+}
+    #square {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 3px solid #800000;
+        width: 600px; /* スクエアのサイズ */
+        height: 360px;
+        margin-top: 10px;
+        background-color: white;
+        position: relative; /* 中の要素が相対的に動く */
+      }
+      #square_image{   
+        z-index: 100;     
+        display: flex;
+        width: 600px; /* スクエアのサイズ */
+        height: 400px;
+        position: absolute; /* 中の要素が相対的に動く */
+      }
+
+
+
+    /* 横の円 */
+      .map_circle {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute; /* スクエア内で位置を維持 */
+        gap: 30px;
+      }
+      .circle1 {
+        width: 35px;
+        height: 35px;
+        background-color: #eded45;
+        position: relative;
+        border-radius: 50%; /* これで円形になる */
+
+      }
+
+        /* 縦の円 */
+      .overlay-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px; /* これで円同士の間隔*/
+        position: relative;
+      }
+      .overlay-circle1, .overlay-circle3 {
+        width: 35px;
+        height: 35px;
+        top: 60px;
+        left: 0px;
+        right: 0px;
+        background-color: #FF9933;
+        border-radius: 50%;
+        position: relative;
+      }
+      .overlay-circle2, .overlay-circle4 {
+        width: 35px;
+        height: 35px;
+        top: -120px;
+        left: 0px;
+        right: 0px;
+        background-color: #FF9933;
+        border-radius: 50%;
+        position: relative;
+      }
+
+      .map_font{
+        text-align: center;
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .sea_circle{
+        width: 250px;
+        height: 80px;
+        top: 250px;
+        left: 120px;
+        background-color: #6495ED;
+        border-radius: 45%;
+        position: absolute;
+        z-index: 0;
+      }
+
+
+      #vegetables{
+        position: relative;
+        top: 100px;
+        right: 200px;
+        z-index: 100;
+      }
+      #house{
+        position: relative;
+        top: 100px;
+        right: -185px;
+        z-index: 100;
+      }
+
+      #fish{
+        position: relative;
+        top: 260px;
+        right: 150px;
+        z-index: 999;
+      }
+      #submarine{
+        position: relative;
+        top: 260px;
+        right: -230px;
+        z-index: 100;
+      }
+
+      #tree{
+        position: relative;
+        top: 30px;
+        right: -100px;
+        z-index: 100;
+      }
+      #chef{
+        position: relative;
+        top:30px;
+        right: -450px;
+        z-index: 100;
+      }
+
+      #clownfish{
+        position: relative;
+        top: 110px;
+        right: 110px;
+        z-index: 100;
+      }
+      #tree2{
+        position: relative;
+        top: -120px;
+        right: 200px;
+        z-index: 100;
+      }
+      #tree3{
+        position: relative;
+        top: -140px;
+        right: 240px;
+        z-index: 100;
+      }
