@@ -1,0 +1,33 @@
+body {
+    padding: 30px;
+    font-family: sans-serif;
+    text-align: center;
+}
+.map-container {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto; /* 横スクロール許可するなら */
+  justify-content: center;
+  gap: 30px;
+  padding: 20px;
+}
+
+.map-box {
+  width: 200px;
+  text-align: center;
+  font-family: sans-serif;
+}
+
+.map_title {
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.chart-container {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto; /* 横スクロール許可するなら */
+  gap: 20px;
+}

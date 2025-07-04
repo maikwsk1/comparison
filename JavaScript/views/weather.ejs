@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>
+        <%= prefecture %>の天気
+    </title>
+</head>
+
+<body>
+    <% if (error) { %>
+        <p>
+            <%= error %>
+        </p>
+        <% } else if (weatherData) { %>
+            <h1>
+                <%= prefecture %> の天気情報
+            </h1>
+            <p>天気コード: <%= weatherData.weather %>
+            </p>
+            <p>気温: <%= weatherData.temp %>°C</p>
+            <% } else { %>
+                <p>天気情報を取得できませんでした。</p>
+                <% } %>
+                    <a href="/#contact">戻る</a>
+</body>
+
+</html>

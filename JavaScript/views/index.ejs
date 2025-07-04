@@ -1,0 +1,318 @@
+<!DOCTYPE html><!--HTML5-->
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--CSS読み込み-->
+    <link rel="stylesheet" href="/style.css">
+
+    <!--Bootstrap読み込み-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <!-- すべてを囲むconrainer -->
+    <div class="container py-4">
+
+        <!--目次タブ-->
+        <div class="mb-4">
+            <a href="#news" class="btn btn-outline-dark me-2">📰 ニュース</a>
+            <a href="#charts" class="btn btn-outline-dark me-2">📈 思想バランス</a>
+            <a href="#inventory" class="btn btn-outline-dark me-2">🎒 持ち物</a>
+            <a href="#explore" class="btn btn-outline-dark">🪵 探索ゾーン</a>
+        </div>
+
+        <!-- プロタグに関する記述 -->
+        <div class="row d-flex justify-content-between p-1">
+            <div class="col-3 d-flex justify-content-center align-items-center">
+                <img src="images/character.png" width="200" height="200" />
+            </div>
+        </div>
+
+
+        <h3>📜行動のログ</h3>
+        <% if (session.message) { %>
+            <%= session.message %>
+                <% session.message=null; %>
+                    <% } %>
+
+                        <div class="text-end my-3">
+                            <button class="btn btn-danger" onclick="handleReset()">🔁 初期化して再スタート</button>
+                            <button class="btn btn-danger" onclick="restartAll()">🔁 ニュース最初から</button>
+                        </div>
+
+                        <h3>📰 ターン <%= turn %>: <%= news?.title || "イベント終了" %>
+                        </h3>
+
+                        <% if (penalty) { %>
+                            <div class="alert alert-danger">
+                                ⚠️ <strong>
+                                    <%= penalty.penalty.text %>
+                                </strong><br>
+                                <small>
+                                    影響：
+                                    <%= Object.entries(penalty.penalty.effect).map(([tag, val])=> `${tag} ${val > 0 ?
+                                        "+" :
+                                        ""}${val}`).join("／") %>
+                                        （<%= penalty.penalty.region %>）
+                                </small>
+                            </div>
+                            <% } %>
+
+                                <% if (news) { %>
+                                    <form action="/apply_news_choice" method="post">
+                                        <input type="hidden" name="turn" value="<%= turn %>">
+                                        <% news.choices.forEach(choice=> { %>
+                                            <button name="choice" value="<%= choice.id %>"
+                                                class="btn btn-outline-primary m-1">
+                                                <%= choice.id %>: <%= choice.text %>
+                                            </button>
+                                            <% }) %>
+                                    </form>
+                                    <% } else { %>
+                                        <p>📝 全ターン完了しました！</p>
+                                        <% } %>
+
+                                            <h3 class="mt-5" id="charts">📈 各都市の思想バランス</h3>
+                                            <div class="mt-4 mb-3 p-2 text-center">
+                                                <strong>🧭 思想カテゴリ：</strong>
+                                                <span style="color:#007BFF">🔵 教育</span> ／
+                                                <span style="color:#FF4136">🔴 統制</span> ／
+                                                <span style="color:#FFDC00">🟡 経済</span> ／
+                                                <span style="color:#333333">⚫ 無秩序</span> ／
+                                                <span style="color:#2ECC40">🟢 農業</span>
+                                            </div>
+
+                                            <div class="d-flex gap-3 mb-3">
+                                                <button class="btn btn-outline-primary"
+                                                    onclick="drawCharts('current')">🌀
+                                                    現在のスコア</button>
+                                                <button class="btn btn-outline-secondary"
+                                                    onclick="drawCharts('initial')">🔁
+                                                    初期スコア</button>
+                                            </div>
+                                            <div class="chart-container">
+                                                <div class="chart-box"><canvas id="minatoChart" width="200"></canvas>
+                                                </div>
+                                                <div class="chart-box"><canvas id="naniwaChart" width="200"></canvas>
+                                                </div>
+                                                <div class="chart-box"><canvas id="kitanoChart" width="200"></canvas>
+                                                </div>
+                                                <div class="chart-box"><canvas id="misakiChart" width="200"></canvas>
+                                                </div>
+                                                <div class="chart-box"><canvas id="shirasagiChart" width="200"></canvas>
+                                                </div>
+                                            </div>
+
+
+                                            <form action="/apply_dish" method="POST">
+                                                <div class="mb-3">
+                                                    <label for="dish" class="form-label">
+                                                        <h4 class="mt-5">📝 過去に作った料理を選択して反映</h4>
+                                                    </label>
+                                                    <select name="selected_dish" id="dish" class="form-select">
+                                                        <% if (session.completed_dishes &&
+                                                            session.completed_dishes.length>
+                                                            0) { %>
+                                                            <% session.completed_dishes.forEach(dish=> { %>
+                                                                <option value="<%= dish %>">
+                                                                    <%= dish %>
+                                                                </option>
+                                                                <% }) %>
+                                                                    <% } else { %>
+                                                                        <option disabled>まだ調理された料理がありません</option>
+                                                                        <% } %>
+                                                    </select>
+                                                </div>
+                                                <% const selectedDishData=dishData.find(d=> d.name === selectedDish); %>
+
+                                                    <% if (selectedDishData?.type==="color" ) { %>
+                                                        <form action="/apply_dish" method="POST">
+                                                            <input type="hidden" name="selected_dish"
+                                                                value="<%= completed_food %>">
+
+
+                                                            <label for="selected_city" class="form-label"><b>🏙
+                                                                    都市を選択</b></label>
+                                                            <select name="selected_city" id="selected_city"
+                                                                class="form-select mb-2">
+                                                                <option value="minato">東京</option>
+                                                                <option value="naniwa">大阪</option>
+                                                                <option value="kitano">札幌</option>
+                                                                <option value="misaki">長崎</option>
+                                                                <option value="shirasagi">広島</option>
+                                                            </select>
+
+
+                                                            <% } %><button type="submit" class="btn btn-success">📊
+                                                                    都市に反映する</button>
+                                                        </form>
+
+                                                        <h3 class="mt-5" id="explore">🪵 食材探索ゾーン</h3>
+                                                        <div
+                                                            class=" row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-3">
+
+                                                            <div class="col text-center">
+                                                                <a href="/chef" class="text-decoration-none text-dark">
+                                                                    <div class="p-2 bg-white border rounded h-100">
+                                                                        <div class="fw-bold mb-1">📋 レシピ監修官</div>
+                                                                        <div class="text-muted small mb-2">
+                                                                            調理進行と文化の補助案内</div>
+                                                                        <img src="/images/chef.png" width="100"
+                                                                            height="100" alt="調理ガイド・レシピ監修官のアイコン">
+                                                                    </div>
+                                                                </a>
+                                                            </div>
+
+                                                            <div class="col text-center">
+                                                                <a href="/finding_things?source=submarine"
+                                                                    class="text-decoration-none text-dark">
+                                                                    <div class="p-2 bg-white border rounded h-100">
+                                                                        <div class="fw-bold mb-1">🌊 水産資源群</div>
+                                                                        <div class="text-muted small mb-2">
+                                                                            魚介・海藻・出汁素材など</div>
+                                                                        <img src="images/submarine.png" width="100"
+                                                                            height="100" alt="海の探索アイコン">
+                                                                    </div>
+                                                                </a>
+                                                            </div>
+
+                                                            <div class="col text-center">
+                                                                <a href="/finding_things?source=tree"
+                                                                    class="text-decoration-none text-dark">
+                                                                    <div class="p-2 bg-white border rounded h-100">
+                                                                        <div class="fw-bold mb-1">🌲 山間部植物資源群</div>
+                                                                        <div class="text-muted small mb-2">
+                                                                            山菜・根菜・乾物素材など</div>
+                                                                        <img src="/images/tree.png" width="100"
+                                                                            height="100" alt="森の探索アイコン">
+                                                                    </div>
+                                                                </a>
+                                                            </div>
+
+                                                            <div class="col text-center">
+                                                                <a href="/finding_things?source=earth"
+                                                                    class="text-decoration-none text-dark">
+                                                                    <div class="p-2 bg-white border rounded h-100">
+                                                                        <div class="fw-bold mb-1">🧂 調味構成基盤群</div>
+                                                                        <div class="text-muted small mb-2">
+                                                                            味噌・出汁・粉類・スパイスなど</div>
+                                                                        <img src="/images/earth.png" width="100"
+                                                                            height="100" alt="調味素材ゾーンのアイコン">
+                                                                    </div>
+                                                                </a>
+                                                            </div>
+
+                                                            <div class="col text-center"><a
+                                                                    href="/finding_things?source=house"
+                                                                    class="text-decoration-none text-dark">
+                                                                    <div class="p-2 bg-white border rounded h-100">
+                                                                        <div class="fw-bold mb-1">🏠 家庭内調理器具群</div>
+                                                                        <div class="text-muted small mb-2">
+                                                                            鍋・鉄板・フライ器など</div>
+
+                                                                        <img src="images/house.png" width="100"
+                                                                            height="100" alt="家庭内調理器具アイコン">
+                                                                </a>
+                                                            </div>
+                                                        </div>
+
+    </div>
+
+    <!-- 選択された食材の材料 -->
+    <div class="p-3 bg-light rounded shadow-sm">
+        <h3 class="mb-3 mt-5" id="inventory">🎒 現在の持ち物</h3>
+
+        <div class="d-flex flex-wrap gap-3 justify-content-start">
+
+            <!-- 家の道具 -->
+            <div class="border rounded p-3 bg-white" style="width: 220px;">
+                <h6>🏠 家庭内調理器具</h6>
+                <p class="mb-1 text-muted"><small>鍋・鉄板・フライ器など</small></p>
+                <div>
+                    <%= session.tool_house || "なし" %>
+                </div>
+            </div>
+
+            <!-- 森の食材 -->
+            <div class="border rounded p-3 bg-white" style="width: 220px;">
+                <h6>🌲 山間部植物素材</h6>
+                <p class="mb-1 text-muted"><small>山菜・根菜・乾物など</small></p>
+                <div>
+                    <%= session.food_tree || "なし" %>
+                </div>
+            </div>
+
+            <!-- 海の食材 -->
+            <div class="border rounded p-3 bg-white" style="width: 220px;">
+                <h6>🌊 水産資源素材</h6>
+                <p class="mb-1 text-muted"><small>魚介・海藻・魚出汁など</small></p>
+                <div>
+                    <%= session.food_fish || "なし" %>
+                </div>
+            </div>
+
+            <!-- 地の素材 -->
+            <div class="border rounded p-3 bg-white" style="width: 220px;">
+                <h6>🧂 調味構成基盤素材</h6>
+                <p class="mb-1 text-muted"><small>味噌・出汁・粉類・スパイス等</small></p>
+                <div>
+                    <div>
+                        <% if (Array.isArray(session.food_earth)) { %>
+                            <% session.food_earth.forEach(item=> { %>
+                                <div>
+                                    <%= item %>
+                                </div>
+                                <% }) %>
+                                    <% } else if (typeof session.food_earth==="string" ) { %>
+                                        <div>
+                                            <%= session.food_earth %>
+                                        </div>
+                                        <% } %>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!--専門家-->
+    <!--
+                        <div id="fish">
+                            <div class="map_font">🐟 魚の専門家（加工アドバイザー）：魚介系料理の処理・提案に詳しい</div>
+                            <a href="/contact_staff?source=fish">
+                                <img src="images/person_fish.png" width="100" height="100" alt="魚の専門家のアイコン">
+                            </a>
+                        </div>
+
+                        <div id="vegetables">
+                            <div class="map_font">🥕 野菜の専門家（栽培・活用相談）：野菜の特徴や活かし方をアドバイス</div>
+                            <a href="/contact_staff?source=vegetables">
+                                <img src="images/person_vegetables.png" width="100" height="100" alt="野菜の専門家のアイコン">
+                            </a>
+                        </div>-->
+
+    <!--天気検索の入力欄-->
+    <!--
+        <h1>都道府県の天気を検索</h1>
+        <form action="/weather" method="POST">
+            <label for="prefecture">都道府県:</label>
+            <input type="text" id="prefecture" name="prefecture" required>
+            <button type="submit">検索</button>
+        </form>
+        -->
+
+
+    <!-- ↓この順番が超重要:JavaScriptの取り込み・chart.jsの取り込み（グラフを描画できる） -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/common.js"></script>
+</body>
+
+
+</html>

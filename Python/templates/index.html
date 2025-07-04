@@ -22,37 +22,44 @@
                 <div class="p-1 border-bottom border-secondary">
                     <h2>概要</h2>
                 </div>
-                <div id="game_flow"><!--ゲームの流れの説明-->
-                    <div class="bold-text">プロタグが食べたいもののために、材料を集めて料理し、与えるゲームです</div>
+                <!--ゲームの流れの説明-->
+                <div class="pt-2">
+                    <div><b>プロタグが食べたいもののために、材料を集めて料理し、与えるゲームです</b></div>
                     <ol>
                         <li><b>スタートボタン</b>を押してください</li>
-                        <li><b>プロタグ</b>が食べたいものを教えてくれる</li>
-                        <li>その食べ物の<b>専門家</b>にレシピを聞く</li>
-                        <li><b>専門家</b>に何が欲しいの？と聞かれる</li>
-                        <li>プロタグに言われたものを<b>入力</b>する</li>
-                        <li>指示どうりに<b>材料</b>を取りに行く</li>
-                        <li><b>料理長</b>に材料を渡し、作ってもらう</li>
+                        <li><b>プロタグ</b>が食べたいものを確認する</li>
+                        <li>その食べ物の専門家に<b>レシピを聞く</b></li>
+                        <li>指示どうりに<b>材料を集める</b></li>
+                        <li><b>料理長</b>に材料を渡し、調理してもらう</li>
                         <li>完成した料理を<b>プロタグ</b>に渡す</li>
-                        <li>お礼を言われて<b>クリア</b></li>
+                        <li>お礼を言われたら<b>クリア</b></li>
                         <li><b>終了ボタン</b>を押してください</li>
                     </ol>
                 </div>
-                <div class="p-3 mb-2 .bg-body-tertiary"><!--スタート、終了ボタン-->
-                    <button type="button" class="btn btn-danger" onclick="startAndReset()">スタートボタン</button>
-                    <button type="button" class="btn btn-success" onclick="resetSession()">終了ボタン</button>
+                <!-- 音声ファイル -->
+                <audio id="clickSound" src="/static/sound/クリック時の音.mp3"></audio>
+
+                <!-- スタート & 終了ボタン -->
+                <div class="p-3 mb-2 bg-body-tertiary">
+                    <button type="button" class="btn btn-danger"
+                        onclick="document.getElementById('clickSound').play(); startAndReset()">スタートボタン</button>
+                    <button type="button" class="btn btn-success"
+                        onclick="document.getElementById('clickSound').play(); resetSession()">終了ボタン</button>
                 </div>
                 <div><!--入力欄全て-->
-                    <div class="p-3 mb-2 .bg-body-tertiary">
+                    <div class="p-2 mb-1 .bg-body-tertiary">
                         <div class="p-1 border-bottom border-secondary">
                             <h4>入力欄</h4>
                         </div>
-                        <div id="enter">
+                        <div class="pt-2">
                             <form method="POST" action="/contact_staff">
                                 <input type="hidden" name="source" id="source_input" class="form-label">
                                 <div class="d-flex align-items-center">
                                     <input id="food_id" name="food_id" placeholder="食べ物の名前" type="text"
                                         class="form-control form-control-sm w-50">
-                                    <button type="submit" class="btn btn-outline-danger btn-sm ms-2">送信</button>
+                                    <button type="submit" class="btn btn-outline-danger btn-sm ms-2"
+                                        onclick="playSound()">送信</button>
+
                                 </div>
                             </form>
                         </div>
@@ -61,57 +68,69 @@
             </div>
 
             <div class="col-9">
-                <div class="row d-flex justify-content-between">
+                <div class="row d-flex justify-content-between p-1">
                     <!-- プロタグ -->
-                    <div class="col-3">
-                        <h4>プロタグ</h4>
+                    <div class="col-3 d-flex justify-content-center align-items-center">
+                        <h4 class="me-3">プロタグ</h4>
                         <img src="static/images/character.png" width="100" height="100" />
                     </div>
+
                     <div class="col-3">
-                        <div class="p-3 mb-2 bg-body-tertiary">
-                            <div class="bold-text">プロタグの食べたいものは？</div>
+                        <!--プロタグとの会話-->
+                        <div class="p-2 bg-body-tertiary">
+                            <div><b>➁プロタグが食べたいもの</b></div>
                             <div id="character_demand">{{ session.get('character_demand') }}</div>
+                            <div class="pt-1"><b>完成した料理は？</b></div>
+                            <div>{{ session.get('completed_food', "なし") }}</div>
                         </div>
                     </div>
 
                     <!-- プロタグの持ち物 -->
-                    <div class="col-3 bg-body-secondary">
-                        <div class="bold-text">プロタグの持ち物</div>
-                        <div>家から持ってきた道具:{{ session.get('tool_house', "なし") }}</div>
-                        <div>森で取れた食材:{{ session.get('food_tree', "なし") }}</div>
-                        <div>海で取れた食材:{{ session.get('food_fish', "なし") }}</div>
-
+                    <div class="col-3">
+                        <div class="p-3 bg-body-secondary">
+                            <div><b>現在の持ち物</b></div>
+                            <div><b>道具:</b>{{ session.get('tool_house', "なし") }}</div>
+                            <div><b>森の食材:</b>{{ session.get('food_tree', "なし") }}</div>
+                            <div><b>海の食材:</b>{{ session.get('food_fish', "なし") }}</div>
+                        </div>
                     </div>
-                    <!-- 完成した料理 -->
-                    <div class="col-3 bg-body-tertiary">
-                        <div class="bold-text">完成した料理は？</div>
 
-                        <div>{{ session.get('completed_food', "なし") }}</div>
-                        <form method="POST" action="/clear">
-                            <button type="submit" class="btn btn-warning btn-sm">作った料理をプロタグにあげる</button>
-                        </form>
-                        <div class="bold-text">プロタグからの返答は？</div>
-                        <div>{{ session.get('result_message', "確定後に表示") }}</div>
+                    <!-- 完成した料理 -->
+                    <div class="col-3">
+                        <div class="p-2 bg-body-tertiary">
+                            <div class="pb-1"><b>➅料理完成後にすること</b></div>
+                            <form method="POST" action="/clear" onsubmit="playSound()">
+                                <button type="submit" class="btn btn-warning btn-sm">作った料理をプロタグにあげる</button>
+                            </form>
+
+                            <div class="pt-2"><b>➆プロタグからの返答は？</b></div>
+                            <div>{{ session.get('result_message', "確定後に表示") }}</div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="container">
-                    <div class="row d-flex"><!--地図の内容全て-->
+                <div class="container pt-2 pb-3 px-4 bg-success-subtle">
+                    <!--地図の内容全て-->
+                    <div class="row d-flex">
                         <div class="col-3">
-                            <h2>地図</h2>
+                            <div class="pt-5 mb-3 border-bottom border-secondary">
+                                <h2>地図</h2>
+                            </div>
 
-                            <div class="p-3 mb-2 bg-body-secondary"><!--地図で出来ることの説明文-->
-                                <div class="bold-text">できることは何か？</div>
-                                <div>1. 食べ物の専門家にレシピを聞く：</div>
-                                <div>〇〇専門家をクリック</div>
-                                <div>2. 材料を取りに行く：</div>
-                                <div>森、海、プロタグの家へ</div>
-                                <div>3. 料理を作ってもらう：</div>
-                                <div>料理長をクリック</div>
+                            <!--地図で出来ることの説明文-->
+                            <div class="mt-2 pt-2 pb-2 bg-body-tertiary">
+                                <div id="map_ex">
+                                    <div><b>できることは何か？</b></div>
+                                    <div><b>➂レシピを聞く：</b>〇〇専門家をクリック</div>
+                                    <div><b>➃材料を集める：</b>森、海、プロタグの家へ</div>
+                                    <div><b>➄料理を作る：</b>料理長をクリック</div>
+                                </div>
                             </div>
                         </div>
+
                         <div class="col-6">
-                            <div id="square"><!--地図の内部全て(円と画像）-->
+                            <!--地図の内部全て(円と画像）-->
+                            <div id="square">
                                 <div>
                                     <div class=sea_circle></div>
                                     <div><img id="clownfish" src="static/images/clownfish.png" width="30" height="30" />
@@ -151,48 +170,71 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="square_image"><!--地図の画像を配置する-->
+                                <!-- 音声ファイル -->
+                                <audio id="clickSound" src="/static/sound/クリック時の音.mp3"></audio>
+
+                                <!-- 地図の画像を配置 -->
+                                <div id="square_image">
                                     <div id="chef">
                                         <div class="map_font">料理長</div>
                                         <a href="/chef">
-                                            <img src="static/images/chef.png" onclick="chef()" width="60"
-                                                height="60"></a>
+                                            <img src="static/images/chef.png" onclick="playSound(); chef()" width="60"
+                                                height="60">
+                                        </a>
                                     </div>
                                     <div id="submarine">
                                         <div class="map_font">海</div>
                                         <a href="/finding_things?source=submarine">
-                                            <img src="static/images/submarine.png" width="60" height="60"></a>
+                                            <img src="static/images/submarine.png" onclick="playSound()" width="60"
+                                                height="60">
+                                        </a>
                                     </div>
                                     <div id="tree">
                                         <div class="map_font">森</div>
                                         <a href="/finding_things?source=tree">
-                                            <img src="static/images/tree.png" width="60" height="60"></a>
+                                            <img src="static/images/tree.png" onclick="playSound()" width="60"
+                                                height="60">
+                                        </a>
                                     </div>
                                     <div id="house">
                                         <div class="map_font">プロタグの家</div>
-                                        <a href="/finding_things?source=house"><img src="static/images/house.png"
-                                                width="60" height="60"></a>
+                                        <a href="/finding_things?source=house">
+                                            <img src="static/images/house.png" onclick="playSound()" width="60"
+                                                height="60">
+                                        </a>
                                     </div>
                                     <div id="fish">
                                         <div class="map_font">魚の専門家</div>
-                                        <a href="/contact_staff?source=fish"><img onclick="person_fish()"
-                                                src="static/images/person_fish.png" width="60" height="60">
+                                        <a href="/contact_staff?source=fish">
+                                            <img src="static/images/person_fish.png"
+                                                onclick="playSound(); person_fish()" width="60" height="60">
                                         </a>
                                     </div>
                                     <div id="vegetables">
                                         <div class="map_font">野菜の専門家</div>
-                                        <a href="/contact_staff?source=vegetables"><img onclick="person_vegetables()"
-                                                src="static/images/person_vegetables.png" width="60" height="60">
+                                        <a href="/contact_staff?source=vegetables">
+                                            <img src="static/images/person_vegetables.png"
+                                                onclick="playSound(); person_vegetables()" width="60" height="60">
                                         </a>
                                     </div>
                                 </div>
+
+                                <!-- JavaScript -->
+                                <script>
+                                    function playSound() {
+                                        let audio = document.getElementById("clickSound");
+                                        audio.play();
+                                    }
+                                </script>
                             </div>
                         </div>
                     </div>
                 </div>
 
             </div>
+
         </div>
+    </div>
 
 </body>
 

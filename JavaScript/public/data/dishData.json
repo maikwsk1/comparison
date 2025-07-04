@@ -1,0 +1,307 @@
+[
+    {
+    "name": "学校カレー",
+    "type": "city",
+    "city": "minato",
+    "tags": ["blue", "red"],
+    "conditions": {
+      "food_tree": "根菜セット（にんじん・じゃがいも）",
+      "food_earth": "香辛料パック（カレー粉・スパイス）",
+      "tool_house": "煮込み鍋"
+    },
+    "message": "学校カレーの材料が揃っています！煮込み始めます。"
+  },
+    {
+    "name": "のり弁当風ご飯",
+    "type": "city",
+    "tags": ["yellow", "blue"],
+    "city": "minato",
+    "conditions": {
+      "food_tree": "乾物野菜セット（海苔・しらす）",
+      "food_earth": "白米",
+      "tool_house": "お弁当詰め工程"
+    },
+    "message": "のり弁当風ご飯を包みます。のりの香りが食欲をそそります！"
+  },
+  {
+    "name": "濃口味噌汁",
+    "type": "city",
+    "tags": ["green", "blue"],
+    "city": "minato",
+    "conditions": {
+      "food_tree": "野菜セット（大根・ねぎ）",
+      "food_earth": "味噌",
+      "tool_house": "煮込み鍋"
+    },
+    "message": "濃口味噌汁をコトコト煮込み中…。"
+  },
+    {
+    "name": "お好み焼き",
+    "type": "city",
+    "city": "naniwa",
+    "tags": ["yellow", "red"],
+    "conditions": {
+      "food_earth": "麦粉・小麦粉セット（ラーメン・お好み焼き・パン）",
+      "food_fish": "海鮮ミックス（イカ・桜えび）",
+      "tool_house": "鉄板"
+    },
+    "message": "お好み焼きを焼いています！香ばしい香りが漂います。"
+  },
+    {
+    "name": "串カツ",
+    "type": "city",
+    "city": "naniwa",
+    "tags": ["yellow", "yellow"],
+    "conditions": {
+      "food_earth": "衣粉セット（パン粉・卵）",
+      "food_tree": "お肉",
+      "tool_house": "フライ器"
+    },
+    "message": "串カツを揚げています…ジュワッと美味しそう！"
+  },
+    {
+    "name": "たこ焼き",
+    "type": "city",
+    "city": "naniwa",
+    "tags": ["yellow", "green"],
+    "conditions": {
+      "food_earth": "麦粉・小麦粉セット（ラーメン・お好み焼き・パン）",
+      "food_fish": "タコ切片",
+      "tool_house": "たこ焼き器"
+    },
+    "message": "たこ焼きづくりスタート！外はカリッと中はトロトロ。"
+  },
+    {
+    "name": "味噌ラーメン",
+    "type": "city",
+    "city": "kitano",
+    "tags": ["red", "green"],
+    "conditions": {
+      "food_earth": "寒地小麦麺と焙煎味噌+炒めバターコーン",
+      "tool_house": "煮込み鍋"
+    },
+    "message": "札幌名物・味噌ラーメンを調理中！"
+  },
+    {
+    "name": "石狩鍋",
+    "type": "city",
+    "city": "kitano",
+    "tags": ["green", "blue"],
+    "conditions": {
+      "food_tree": "根菜セット（にんじん・じゃがいも）",
+      "food_fish": "魚切身（鮭）",
+      "tool_house": "煮込み鍋"
+    },
+    "message": "石狩鍋をコトコト煮ています…体の芯から温まりますね。"
+  },
+  {
+    "name": "スープカレー",
+    "type": "city",
+    "tags": ["yellow", "blue"],
+    "city": "kitano",
+    "conditions": {
+      "food_tree": "色野菜盛り（にんじん・ピーマン）",
+      "food_earth": "香辛料パック（カレー粉・スパイス）",
+      "tool_house": "煮込み鍋"
+    },
+    "message": "スープカレーを仕込み中です！色と香りが鮮やか。"
+  },
+  {
+    "name": "トルコライス",
+    "type": "city",
+    "tags": ["yellow", "blue"],
+    "city": "misaki",
+    "conditions": {
+      "food_earth": "白米+洋風粉末とカツ素材（魚or豚）",
+      "tool_house": "ワンプレート皿"
+    },
+    "message": "トルコライス、盛り付け中です！異国情緒漂う一品。"
+  },
+  {
+    "name": "皿うどん",
+    "type": "city",
+    "tags": ["yellow", "red"],
+    "city": "misaki",
+    "conditions": {
+      "food_earth": "乾麺",
+      "food_tree": "野菜あん",
+      "tool_house": "炒め釜"
+    },
+    "message": "皿うどんをパリっと仕上げています。"
+  },
+    {
+    "name": "しっぽくうどん",
+    "type": "city",
+    "city": "misaki",
+    "tags": ["green", "blue"],
+    "conditions": {
+      "food_tree": "根菜セット（にんじん・じゃがいも",
+      "food_earth": "うどん",
+      "tool_house": "煮込み釜"
+    },
+    "message": "しっぽくうどんの優しい出汁が香っています。"
+  },
+  {
+  "name": "広島のお好み焼き",
+  "type": "city",
+  "city": "shirasagi",
+  "tags": ["red", "green"],
+  "conditions": {
+    "food_tree": "キャベツ山",
+    "food_earth": "麦粉・小麦粉セット（ラーメン・お好み焼き・パン）",
+    "tool_house": "鉄板"
+  },
+  "message": "キャベツの層が美しく焼き上がりました。"
+},
+{
+  "name": "もみじ饅頭",
+  "type": "city",
+  "city": "shirasagi",
+  "tags": ["yellow", "blue"],
+  "conditions": {
+    "food_earth": "小麦粉+あんこ",
+    "tool_house": "焼き型"
+  },
+  "message": "ふんわり甘いもみじ饅頭が完成しました。"
+},
+{
+  "name": "おこわ飯",
+  "type": "city",
+  "city": "shirasagi",
+  "tags": ["green", "green"],
+  "conditions": {
+    "food_earth": "もち米+出汁（煮干し・昆布）",
+    "tool_house": "蒸籠"
+  },
+  "message": "蒸気でほくほくのおこわ飯が炊きあがりました。"
+},
+ {
+  "name": "配給乾パンセット",
+  "type": "color",
+  "tags": ["red", "yellow"],
+  "conditions": {
+    "food_earth": "小麦粉＋砂糖",
+    "tool_house": "乾燥炉"
+  },
+  "message": "乾パンを焼成中。保存性は抜群。"
+},
+{
+  "name": "軍用レーションシチュー",
+  "type": "color",
+  "tags": ["red", "black"],
+  "conditions": {
+    "food_tree": "保存野菜+缶詰お肉",
+    "tool_house": "煮込み釜"
+  },
+  "message": "軍用レーションシチューを加熱中…。腹持ちは抜群。"
+},
+{
+  "name": "軍用クラッカーセット",
+  "type": "color",
+  "tags": ["red", "green"],
+  "conditions": {
+    "food_earth": "小麦粉＋オイル",
+    "tool_house": "乾燥炉"
+  },
+  "message": "クラッカーを焼成中。噛みしめるごとに軍の気配。"
+},
+{
+  "name": "給食の鯖の味噌煮",
+  "type": "color",
+  "tags": ["blue", "red"],
+  "conditions": {
+    "food_fish": "魚切身（鯖）",
+    "food_earth": "味噌",
+    "tool_house": "煮込み釜"
+  },
+  "message": "鯖の味噌煮、給食の味が香ります。"
+},
+{
+  "name": "牛乳ゼリーとコッペパン",
+  "type": "color",
+  "tags": ["blue", "yellow"],
+  "conditions": {
+    "food_tree": "牛乳",
+    "food_earth": "パン",
+    "tool_house": "冷却皿"
+  },
+  "message": "冷やされた牛乳ゼリーとふわふわパン。懐かしい給食のセット。"
+},
+{
+  "name": "栄養満点の野菜スープ",
+  "type": "color",
+  "tags": ["blue", "green"],
+  "conditions": {
+    "food_tree": "野菜セット（大根・ねぎ）",
+    "food_earth": "出汁（煮干し・昆布）",
+    "tool_house": "煮込み鍋"
+  },
+  "message": "栄養たっぷりの野菜スープ、心も身体もあったまる。"
+},
+{
+  "name": "山菜おにぎり",
+  "type": "color",
+  "tags": ["green", "blue"],
+  "conditions": {
+    "food_tree": "山菜",
+    "food_earth": "白米",
+    "tool_house": "包み布"
+  },
+  "message": "山菜おにぎりを包みました。山の香りが漂います。"
+},
+{
+  "name": "地元野菜の蒸し物",
+  "type": "color",
+  "tags": ["green", "yellow"],
+  "conditions": {
+    "food_tree": "根菜セット（にんじん・じゃがいも）",
+    "food_earth": "塩",
+    "tool_house": "蒸籠"
+  },
+  "message": "地元の野菜を蒸しあげ中。素材の味が活きています。"
+},
+{
+  "name": "野菜の炭火田楽",
+  "type": "color",
+  "tags": ["green", "red"],
+  "conditions": {
+    "food_tree": "根菜セット（にんじん・じゃがいも）",
+    "food_earth": "味噌",
+    "tool_house": "炙り皿"
+  },
+  "message": "根菜の田楽を炙り中。祭りの香りが立ち昇る。"
+},
+{
+  "name": "屋台焼きそば",
+  "type": "color",
+  "tags": ["yellow", "red"],
+  "conditions": {
+    "food_earth": "麺",
+    "food_fish": "海鮮ミックス（イカ・桜えび）",
+    "tool_house": "鉄板"
+  },
+  "message": "焼きそば調理中！ジュウジュウ音が屋台の活気を呼びます。"
+},
+{
+  "name": "フェス用ホットドッグ",
+  "type": "color",
+  "tags": ["yellow", "blue"],
+  "conditions": {
+    "food_earth": "パン",
+    "food_tree": "ソーセージ",
+    "tool_house": "鉄板"
+  },
+  "message": "ホットドッグ、フェス準備中。焼き目が最高！"
+},
+{
+  "name": "ブランド野菜のグリル",
+  "type": "color",
+  "tags": ["yellow", "green"],
+  "conditions": {
+    "food_tree": "トマト",
+    "food_earth": "オイル",
+    "tool_house": "炙り皿"
+  },
+  "message": "トマトのグリル、色も香りも贅沢な逸品。"
+}
+]

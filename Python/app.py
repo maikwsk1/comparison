@@ -1,25 +1,12 @@
 # Flask のインポート
 from flask import Flask, render_template, jsonify, request, session, flash, redirect, url_for
-
-
-# Pygame のインポート
-import sys
-import pygame
-from pygame.locals import QUIT
-import threading
-
 # 追加機能
-import time
-from PIL import Image  # 画像
 import random
-import pyautogui
 
 # Flask アプリケーションのインスタンスを作成
 app = Flask(__name__)
+app.secret_key = "your_secret_key"  
 
-
-
-app.secret_key = "your_secret_key"  # セッションの暗号化キー
 @app.route('/start', methods=['POST', 'GET'])
 def start():
     food_options = ['焼きとうもろこし', 'かまぼこ']
@@ -28,11 +15,10 @@ def start():
 
     if request.method == 'POST':
         random_food_option = random.choice(food_options)
-        session['character_demand'] = f"私は {random_food_option} が食べたいです。"
-
-    session.modified = True  # ✅ セッションの変更を確実に反映
-
+        session['character_demand'] = f" {random_food_option} が食べたい！"
+    session.modified = True  
     return jsonify(character_demand=session['character_demand'])
+
 @app.route('/', methods=['GET', 'POST'])
 def food_input():
     session.setdefault('character_demand', "確定後表示")
@@ -42,7 +28,7 @@ def food_input():
     if request.method == 'POST':
         food_id = request.form.get('food_id', None)
         if not session.get('selectedSource'):
-            return "❌ 店舗が選択されていません！ 先に店舗を選んでください。"
+            return "❌ 専門家が選択されていません！ 先に専門家を選択してください。"
 
         session['food_id'] = food_id
 
@@ -62,11 +48,11 @@ def clear():
     character_demand = session.get('character_demand', None)
 
     if completed_food and character_demand and completed_food in character_demand:
-        session['result_message'] = "ありがとう！クリアしました。"
+        session['result_message'] = "ありがとう！ゲームクリア！！"
     else:
         session['result_message'] = "違うものがほしかった。"
 
-    return redirect(url_for('food_input'))  # ✅ ページをリロードして反映
+    return redirect(url_for('food_input'))  
 
 @app.route('/contact_staff', methods=['GET', 'POST'])
 def contact_staff():
@@ -74,21 +60,14 @@ def contact_staff():
     food_id = session.get('food_id', None)
     source = request.args.get("source", None)
 
-    print(f"🔍 `contact_staff` リクエスト時の selectedSource: {selected_source}, food_id: {food_id}")
-
-    # ✅ `GET` のリクエストで店舗選択をセット
     if request.method == 'GET' and source:
         session['selectedSource'] = source
-        session.modified = True  # ✅ セッションの変更を明示
-        print(f"✅ `selectedSource` を更新 (GET): {session.get('selectedSource')}")
+        session.modified = True  
 
-    # ✅ `POST` の場合、食べ物の処理
     if request.method == 'POST':
         food_id = request.form.get("food_id", None)
         if food_id:
             session['food_id'] = food_id
-            print(f"✅ `food_id` を更新: {session['food_id']}")
-
         if not session.get('selectedSource'):
             message= "❌ 先に専門家にレシピを聞いてください。"
             return render_template('contact_staff.html', message=message)
@@ -96,55 +75,47 @@ def contact_staff():
             message=  "❌ 食べ物が選択されていません！"
             return render_template('contact_staff.html', message=message)
 
-        # ✅ `POST` のリクエスト時に食べ物の処理
         if session.get('selectedSource') == "fish":
             if session.get('food_id') == "かまぼこ":
-                message= "かまぼこが欲しいのならヒラメと金槌を持ってきてね。"
-                return render_template('contact_staff.html', message=message)
-            
+                message= "かまぼこが欲しいのなら、ヒラメと金槌を持ってきてね。"
+                message2="⭕➂正しい専門家を選択し、レシピを聞くことができました。"
+                return render_template('contact_staff.html', message=message, message2=message2)
             else:
-                message= f"申し訳ないですが、{session.get('food_id', '未設定')} は売っていません。"
+                message= f"申し訳ないですが、{session.get('food_id', '未設定')}は他の専門家に聞いてください。"
                 return render_template('contact_staff.html', message=message)
 
         elif session.get('selectedSource') == "vegetables":
             if session.get('food_id') == "焼きとうもろこし":
-                message= "焼きとうもろこしが欲しいならとうもろこしとオーブンレンジを持ってきてね。"
-                return render_template('contact_staff.html', message=message)
+                message= "焼きとうもろこしが欲しいなら、とうもろこしとオーブンレンジを持ってきてね。"
+                message2="⭕➂正しい専門家を選択し、レシピを聞くことができました。"
+                return render_template('contact_staff.html', message=message, message2=message2)
             else:
-                message=  f"申し訳ないですが、{session.get('food_id', '未設定')} は売っていません。"
+                message=  f"申し訳ないですが、{session.get('food_id', '未設定')} は他の専門家に聞いてください。"
                 return render_template('contact_staff.html', message=message)
 
-    # ✅ `GET` の場合、店舗の基本メッセージを表示
     if session.get('selectedSource') == "fish":
-        message= "魚の専門家です。何が欲しいですか？"
+        message= "魚の専門家です。何が欲しいのか、入力欄で教えてください！"
         return render_template('contact_staff.html', message=message)
     
     elif session.get('selectedSource') == "vegetables":
-        message= "野菜の専門家です。何が欲しいですか？"
+        message= "野菜の専門家です。何が欲しいのか、入力欄で教えてください！"
         return render_template('contact_staff.html', message=message)
     else:
-        message= "❌ 先に専門家にレシピを聞いてください。"
+        message= "❌ 順番が間違っています。先に専門家にレシピを聞いてください。"
         return render_template('contact_staff.html', message=message)
-
 
 @app.route('/reset_session', methods=['POST'])
 def reset_session():
-    session.clear()  # ✅ セッションを完全にクリア
-
-    # ✅ 初期値を適切にセット
+    session.clear()  
     session['character_demand'] = "決定後に表示"
-
-    session.modified = True  # ✅ 変更を明示する
-
-    print(f"🔄 `reset_session()` 実行！ character_demand={session.get('character_demand')}")
-
+    session.modified = True  
     return jsonify(character_demand=session.get('character_demand'), result_message=session.get('result_message'))
 
 @app.route('/finding_things', methods=['GET', 'POST'])
 def finding_things():
     foods_tree = ['とうもろこし', 'かぶ']
     tools_house = ['オーブンレンジ', '金槌']
-    foods_fish = ['ヒラメ', '金魚']
+    foods_fish = ['ヒラメ', 'アジ']
 
     source = request.args.get('source', 'default')
 
@@ -153,18 +124,17 @@ def finding_things():
         tool_house = request.form.get('tool_house')
         food_fish = request.form.get('food_fish')
 
-        # ✅ 修正: 値が存在する場合のみ `session` に保存
         if food_tree:
             session['food_tree'] = food_tree
-            flash("収穫しました！", "success")
+            flash("無事に収穫できました。持ち物が追加されました。", "success")
         if tool_house:
             session['tool_house'] = tool_house
-            flash("入手しました！", "success")
+            flash("無事に入手できました。持ち物が追加されました。", "success")
         if food_fish:
             session['food_fish'] = food_fish
-            flash("漁獲しました！", "success")
+            flash("無事に漁獲できました。持ち物が追加されました。", "success")
         return redirect(url_for('finding_things'))
-
+    
     return render_template(
         'finding_things.html', 
         source=source, 
@@ -176,14 +146,13 @@ def finding_things():
         food_fish=session.get('food_fish', None), 
     )
 
-
 @app.route('/chef')
 def chef():
     food_tree = session.get('food_tree', '未指定')
     tool_house = session.get('tool_house', '未指定')
     food_fish = session.get('food_fish', '未指定')
 
-    completed_food = "なし"  # 完成した料理名を記録する変数
+    completed_food = "なし"  
 
     # 焼きとうもろこしチェック
     if food_tree == "とうもろこし" and tool_house == "オーブンレンジ":
@@ -215,16 +184,15 @@ def chef():
         completed_food=completed_food  
     )
 
-
 @app.route('/cooking', methods=['GET', 'POST'])
 def cooking():
     completed_food = session.get('completed_food', None)
     if request.method == 'POST':
          chef_cooking = f"{completed_food} を調理しました。" if completed_food and completed_food != "なし" else "調理するものが選ばれていません。"
-         return render_template('chef.html', chef_cooking=chef_cooking, completed_food=completed_food)
+         chef_cooking2 = "➄料理長に材料を渡し、調理してもらうことができました。"
+         return render_template('chef.html', chef_cooking2=chef_cooking2, chef_cooking=chef_cooking, completed_food=completed_food)
 
     return render_template('chef.html', completed_food=completed_food)
-
 
 # アプリケーションの実行
 if __name__ == '__main__':

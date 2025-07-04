@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>料理長と会話中</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/common.js"></script>
+</head>
+
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="mx-auto" style="max-width: 500px;">
+            <div class="card shadow-sm border-0">
+                <div class="card-body text-center">
+                    <!-- 🎯 タイトルは固定 -->
+                    <h2 class="card-title mb-4">👨‍🍳 料理長と会話中</h2>
+
+
+
+                    <% if (chef_cooking) { %>
+                        <!-- ✅ 完成時：専用イメージとメッセージ -->
+                        <div class="mb-3">
+                            <img src="/images/chef_cooking.png" width="200" height="200" alt="調理中">
+                        </div>
+                        <p class="mb-3">
+                            <%= chef_cooking %>
+                        </p>
+                        <% } else { %>
+                            <!-- 🧑‍🍳 通常時：料理長＆調理ボタン表示 -->
+                            <% if (chef_message) { %>
+                                <p class="mb-3">
+                                    <%= chef_message %>
+                                </p>
+                                <% } %>
+
+                                    <div class="mb-3">
+                                        <img src="/images/chef.png" width="200" height="200" alt="料理長">
+                                    </div>
+
+                                    <% if (completed_food) { %>
+                                        <form action="/cooking" method="POST" class="mb-4">
+                                            <button type="submit" class="btn btn-warning w-100">🍳
+                                                調理お願いします</button>
+                                        </form>
+                                        <% } %>
+                                            <% } %>
+
+                                                <!-- 🏠 HOMEボタンは常時表示 -->
+                                                <div class="d-grid gap-2">
+                                                    <button type="button" class="btn btn-outline-secondary"
+                                                        onclick="window.location.href='/#contact'">
+                                                        🏠 HOMEに戻る
+                                                    </button>
+                                                </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

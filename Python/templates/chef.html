@@ -14,42 +14,49 @@
 </head>
 
 <body>
-    <h2>料理長と会話中</h2>
-    {% if chef_cooking %}
-    {% if completed_food == "かまぼこ" %}
-    <div class="d-flex flex-row">
-        <div><img src="static/images/kamaboko.png" width="150" height="150"></div>
+    <div class="col-4">
+        {% if chef_cooking2 %}
+        {% if completed_food == "かまぼこ" or completed_food == "焼きとうもろこし" %}
+        <div class="alert alert-success">
+            <div>{{ chef_cooking2 }}</div>
+        </div>
+        {% endif %}
+        {% endif %}
+        <h2>料理長と会話中</h2>
+        {% if chef_cooking %}
+        {% if completed_food == "かまぼこ" %}
+        <div class="d-flex flex-row">
+            <div><img src="static/images/kamaboko.png" width="150" height="150"></div>
 
-        <div><img src="static/images/chef_cooking.png" width="200" height="200"></div>
+            <div><img src="static/images/chef_cooking.png" width="200" height="200"></div>
+        </div>
+        {% endif %}
+        {% if completed_food == "焼きとうもろこし" %}
+        <div class="d-flex flex-row">
+            <div><img src="static/images/firecorn.png" width="150" height="150"></div>
+
+            <div><img src="static/images/chef_cooking.png" width="200" height="200"></div>
+        </div>
+        {% endif %}
+        <p>{{ chef_cooking }}</p>
+        {% else %}
+
+        {% if completed_food %}
+        <p>{{ chef_message }}</p>
+        <div><img src="static/images/chef.png" width="200" height="200"></div>
+        {% endif %}
+
+        <form action="/cooking" method="POST">
+            <button type="submit" class="btn btn-outline-warning">調理お願いします。</button>
+        </form>
+
+        <p id="chef_cooking"></p>
+        <p>{{ chef_cooking }}</p>
+
+        {% endif %}
+        <div><button type="button" class="btn btn-secondary btn-sm"
+                onclick="window.location.href='http://127.0.0.1:5000/'">HOMEに戻る</button></div>
     </div>
-    {% endif %}
-    {% if completed_food == "焼きとうもろこし" %}
-    <div class="d-flex flex-row">
-        <div><img src="static/images/firecorn.png" width="150" height="150"></div>
-
-        <div><img src="static/images/chef_cooking.png" width="200" height="200"></div>
-    </div>
-    {% endif %}
-    <p>{{ chef_cooking }}</p>
-    {% else %}
-
-    {% if completed_food %}
-    <p>{{ chef_message }}</p>
-    <div>今から作る料理：{{ completed_food }}</div>
-    <div><img src="static/images/chef.png" width="200" height="200"></div>
-    {% endif %}
-
-    <form action="/cooking" method="POST">
-        <button type="submit" class="btn btn-outline-warning">調理お願いします。</button>
-    </form>
-
-    <p id="chef_cooking"></p>
-    <p>{{ chef_cooking }}</p>
-
-    {% endif %}
-    <div><button type="button" class="btn btn-secondary btn-sm"
-            onclick="window.location.href='http://127.0.0.1:5000/'">HOMEに戻る</button></div>
-
 </body>
 
 </html>

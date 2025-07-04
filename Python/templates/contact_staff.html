@@ -13,23 +13,27 @@
 </head>
 
 <body>
-    <h2>専門家と会話中</h2>
-    <p>{{ message }}</p>
-    {% if session.get('selectedSource') == "fish" %}
-    <img src="{{ url_for('static', filename='/images/person_fish.png')}}" width="200" height="200">
-    <div><button type="button" class="btn btn-outline-primary"
-            onclick="window.location.href='http://127.0.0.1:5000/'">HOMEに戻る</button></div>
+    <div class="col-4">
+        {% if message2 %}
+        <div class="alert alert-success">{{ message2 }}</div>
+        {% endif %}
+        <h2>専門家と会話中</h2>
+        <div>{{ message }}</div>
+        {% if session.get('selectedSource') == "fish" %}
+        <img src="{{ url_for('static', filename='/images/person_fish.png')}}" width="200" height="200">
+        <div><button type="button" class="btn btn-outline-primary"
+                onclick="window.location.href='http://127.0.0.1:5000/'">HOMEに戻る</button></div>
 
-    {% elif session.get('selectedSource') == "vegetables" %}
-    <img src="{{ url_for('static', filename='/images/person_vegetables.png')}}" width="200" height="200">
-    <div><button type="button" class="btn btn-outline-success"
-            onclick="window.location.href='http://127.0.0.1:5000/'">HOMEに戻る</button></div>
-    {% else %}
-    <div><button type="button" class="btn btn-danger"
-            onclick="window.location.href='http://127.0.0.1:5000/'">HOMEに戻る</button></div>
-    {% endif %}
+        {% elif session.get('selectedSource') == "vegetables" %}
+        <img src="{{ url_for('static', filename='/images/person_vegetables.png')}}" width="200" height="200">
+        <div><button type="button" class="btn btn-outline-success"
+                onclick="window.location.href='http://127.0.0.1:5000/'">HOMEに戻る</button></div>
+        {% else %}
+        <div><button type="button" class="btn btn-danger"
+                onclick="window.location.href='http://127.0.0.1:5000/'">HOMEに戻る</button></div>
+        {% endif %}
 
-
+    </div>
 </body>
 
 </html>

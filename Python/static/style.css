@@ -1,28 +1,10 @@
-body{
-  padding: 30px;
+body {
+    padding: 30px;
 }
-.douwn{
-  margin-bottom: 10px; 
-}
+#map_ex{
+   padding: 10px;
+  }
 
-    .alert-success {
-        padding: 5px 10px;
-    }
-#game_flow{
-  padding-top: 5px;
-}
-#enter{
-  padding-top: 10px;
-}
-.font-small{
-font-size: 13px;
-}
-.bold-text{
-font-weight: bold;
-}
-.flex{
-  display: flex;
-}
     #square {
         display: flex;
         justify-content: center;
@@ -94,6 +76,7 @@ font-weight: bold;
         font-size: 13px;
         font-weight: 700;
       }
+
       .sea_circle{
         width: 250px;
         height: 80px;
@@ -118,7 +101,6 @@ font-weight: bold;
         right: -185px;
         z-index: 100;
       }
-
       #fish{
         position: relative;
         top: 260px;
@@ -131,7 +113,6 @@ font-weight: bold;
         right: -230px;
         z-index: 100;
       }
-
       #tree{
         position: relative;
         top: 30px;
@@ -144,11 +125,10 @@ font-weight: bold;
         right: -450px;
         z-index: 100;
       }
-
       #clownfish{
         position: relative;
-        top: 110px;
-        right: 110px;
+        top: 180px;
+        right: 90px;
         z-index: 100;
       }
       #tree2{

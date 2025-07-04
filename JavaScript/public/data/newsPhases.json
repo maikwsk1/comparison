@@ -1,0 +1,498 @@
+[
+  {
+    "turn": 1,
+    "title": "首都の一部に食糧が届かず…",
+    "choices": [
+      {
+        "id": "A",
+        "text": "配給を強化し、軍の統制を強める",
+        "effect": { "red": 10, "black": -5, "yellow": -3 }
+      },
+      {
+        "id": "B",
+        "text": "炊き出しを拡充し、市民の自助を促す",
+        "effect": { "green": 7, "yellow": 5, "black": -3 }
+      }
+    ],
+    "penalty": {
+      "appearsOnTurn": 2,
+      "text": "飢えた民衆が政府施設を襲撃",
+      "effect": { "black": 10, "yellow": -5, "satisfaction": -10 },
+      "region": "東京"
+    }
+  },
+  {
+    "turn": 2,
+    "title": "炊き出し所に長蛇の列…",
+    "choices": [
+      {
+        "id": "A",
+        "text": "給食制度の仮復旧を急ぐ",
+        "effect": { "blue": 10, "green": 5, "black": -3 }
+      },
+      {
+        "id": "B",
+        "text": "緊急農地を復旧して野菜を育てる",
+        "effect": { "green": 10, "red": -2, "black": -2 }
+      }
+    ],
+    "penalty": {
+      "appearsOnTurn": 3,
+      "text": "栄養不足により病人が続出",
+      "effect": { "blue": -5, "green": -5, "black": 5 },
+      "region": "東京・大阪"
+    }
+  },
+  {
+    "turn": 3,
+    "title": "東京で疫病流行の兆し",
+    "choices": [
+      {
+        "id": "A",
+        "text": "区域封鎖と統制強化",
+        "effect": { "red": 10, "black": -5, "green": -5 }
+      },
+      {
+        "id": "B",
+        "text": "給水復旧と衛生教育を急ぐ",
+        "effect": { "blue": 10, "black": -5, "yellow": -2 }
+      }
+    ],
+    "penalty": {
+      "appearsOnTurn": 4,
+      "text": "感染拡大、各都市に波及",
+      "effect": { "blue": -10, "black": 10, "yellow": -3 },
+      "region": "長崎・札幌"}
+    },
+    {
+    "turn": 4,
+    "title": "大阪で暴徒が市場を襲撃",
+    "choices": [
+      {
+        "id": "A",
+        "text": "軍投入で沈静化",
+        "effect": { "red": 10, "black": -10, "yellow": -5 }
+      },
+      {
+        "id": "B",
+        "text": "食糧を優先配布",
+        "effect": { "green": 8, "black": -7, "yellow": 3 }
+      }
+    ],
+    "penalty": {
+      "appearsOnTurn": 5,
+      "text": "大阪、暴徒による食料倉庫焼失",
+      "effect": { "black": 10, "yellow": -5, "green": -3 },
+      "region": "大阪"
+    }
+  },
+  {
+    "turn": 5,
+    "title": "米国から小麦粉支援",
+    "choices": [
+      {
+        "id": "A",
+        "text": "受け取ってパン政策へ転換",
+        "effect": { "yellow": 10, "blue": 5, "green": -3 }
+      },
+      {
+        "id": "B",
+        "text": "自国生産を守り輸入に制限",
+        "effect": { "green": 10, "yellow": -5, "black": 2 }
+      }
+    ],
+    "penalty": {
+      "appearsOnTurn": 6,
+      "text": "支援の受け入れ失敗、国際的信用低下",
+      "effect": { "blue": -5, "yellow": -5, "black": 3 },
+      "region": "全国"
+    }
+  },
+  {
+    "turn": 6,
+    "title": "各地の学校再開",
+    "choices": [
+      {
+        "id": "A",
+        "text": "学校給食を先行再開",
+        "effect": { "blue": 10, "green": 5, "black": -5 }
+      },
+      {
+        "id": "B",
+        "text": "義務教育より現場農業に支援",
+        "effect": { "green": 10, "red": 3, "blue": -5 }
+      }
+    ],
+    "penalty": {
+      "appearsOnTurn": 7,
+      "text": "不登校と教育格差が広がる",
+      "effect": { "blue": -10, "green": -3, "black": 3 },
+      "region": "東京・広島・札幌"
+    }
+  },
+  {
+    "turn": 7,
+    "title": "長崎に缶詰文化が流入",
+    "choices": [
+      {
+        "id": "A",
+        "text": "新しい味を歓迎し都市商業推進",
+        "effect": { "yellow": 10, "black": -2, "green": -3 }
+      },
+      {
+        "id": "B",
+        "text": "伝統的な食文化を守る",
+        "effect": { "green": 7, "red": 3, "yellow": -5 }
+      }
+    ],
+    "penalty": {
+      "appearsOnTurn": 8,
+      "text": "長崎、外資系食品が地元食を圧迫",
+      "effect": { "green": -5, "yellow": 3, "black": 3 },
+      "region": "長崎"
+    }
+  },
+  {
+    "turn": 8,
+    "title": "北海道で干ばつ",
+    "choices": [
+      {
+        "id": "A",
+        "text": "灌漑工事に投資",
+        "effect": { "green": 10, "yellow": -3, "black": -2 }
+      },
+      {
+        "id": "B",
+        "text": "缶詰備蓄制度を導入",
+        "effect": { "red": 7, "green": 3, "black": -5 }
+      }
+    ],
+    "penalty": {
+      "appearsOnTurn": 9,
+      "text": "農作物の全滅、住民が流出",
+      "effect": { "green": -10, "black": 5, "yellow": -3 },
+      "region": "北海道"
+    }
+  },
+  {
+    "turn": 9,
+    "title": "広島で共同炊事場が登場",
+    "choices": [
+      {
+        "id": "A",
+        "text": "市民自助活動を全国に展開",
+        "effect": { "green": 10, "yellow": 5 }
+      },
+      {
+        "id": "B",
+        "text": "国主導で配給管理強化",
+        "effect": { "red": 10, "black": -5 }
+      }
+    ],
+    "penalty": {
+      "appearsOnTurn": 10,
+      "text": "炊事場が荒廃、略奪発生",
+      "effect": { "red": -5, "black": 7, "green": -3 },
+      "region": "広島"
+    }
+  },
+  {
+    "turn": 10,
+    "title": "政策の方向を決定せよ",
+    "choices": [
+      { "id": "A", "text": "教育・給食を軸にする", "effect": { "blue": 10, "green": 5, "black": -5 } },
+      { "id": "B", "text": "配給制度で統制強化", "effect": { "red": 10, "black": -5, "yellow": -5 } },
+      { "id": "C", "text": "農業支援と自給政策", "effect": { "green": 10, "red": 3, "yellow": -3 } }
+    ],
+    "penalty": {
+      "appearsOnTurn": 11,
+      "text": "東京で政策空白への抗議集会",
+      "effect": { "black": 10, "green": -5, "satisfaction": -10 },
+      "region": "東京"
+    }
+  },
+  {
+    "turn": 11,
+    "title": "長崎で多国籍レストランが人気",
+    "choices": [
+      { "id": "A", "text": "多文化食を積極支援", "effect": { "yellow": 10, "blue": 5, "black": -3 } },
+      { "id": "B", "text": "伝統食とのバランスを重視", "effect": { "green": 7, "blue": 3, "yellow": -3 } }
+    ],
+    "penalty": {
+      "appearsOnTurn": 12,
+      "text": "長崎で文化摩擦が激化",
+      "effect": { "black": 8, "yellow": -3, "blue": -2 },
+      "region": "長崎"
+    }
+  },
+  {
+    "turn": 12,
+    "title": "都市部で野菜不足",
+    "choices": [
+      { "id": "A", "text": "都市農園制度を導入", "effect": { "green": 10, "yellow": 3 } },
+      { "id": "B", "text": "食品合成ラボを設置", "effect": { "blue": 10, "yellow": 5, "green": -3 } }
+    ],
+    "penalty": {
+      "appearsOnTurn": 13,
+      "text": "大阪の市場で野菜争奪",
+      "effect": { "black": 10, "yellow": -5, "green": -5 },
+      "region": "大阪"
+    }
+  },
+  {
+    "turn": 13,
+    "title": "学校で食中毒事件",
+    "choices": [
+      { "id": "A", "text": "衛生管理を徹底", "effect": { "blue": 10, "black": -5 } },
+      { "id": "B", "text": "統制強化し私企業を制限", "effect": { "red": 8, "yellow": -5 } }
+    ],
+    "penalty": {
+      "appearsOnTurn": 14,
+      "text": "広島で集団感染拡大",
+      "effect": { "black": 15, "blue": -5, "satisfaction": -15 },
+      "region": "広島"
+    }
+  },
+  {
+    "turn": 14,
+    "title": "デパ地下の人気で地方が衰退",
+    "choices": [
+      { "id": "A", "text": "都市ブランドをさらに強化", "effect": { "yellow": 10, "green": -5 } },
+      { "id": "B", "text": "地方の物産を都市へ流通", "effect": { "green": 8, "yellow": 5, "black": -2 } }
+    ],
+    "penalty": {
+      "appearsOnTurn": 15,
+      "text": "札幌の農家で廃業続出",
+      "effect": { "green": -10, "black": 5, "gap": 1 },
+      "region": "札幌"
+    }
+  },
+  {
+    "turn": 15,
+    "title": "余剰食材の廃棄が問題に",
+    "choices": [
+      { "id": "A", "text": "フードバンク設置", "effect": { "blue": 8, "green": 5, "black": -3 } },
+      { "id": "B", "text": "自由経済と規制緩和", "effect": { "yellow": 10, "red": 3, "black": 3 } }
+    ],
+    "penalty": {
+      "appearsOnTurn": 16,
+      "text": "東京の埋立地に大量廃棄、炎上",
+      "effect": { "black": 7, "green": -5, "satisfaction": -8 },
+      "region": "東京"
+    }
+  },
+
+  {
+    "turn": 16,
+    "title": "広島で米軍配給に依存する動き",
+    "choices": [
+      { "id": "A", "text": "自立支援政策を導入", "effect": { "green": 10, "blue": 3, "black": -3 } },
+      { "id": "B", "text": "外交的な協定で供給維持", "effect": { "yellow": 10, "red": 5 } }
+    ],
+    "penalty": {
+      "appearsOnTurn": 17,
+      "text": "広島で配給暴動、一部争奪戦に発展",
+      "effect": { "black": 10, "red": 3, "satisfaction": -10 },
+      "region": "広島"
+    }
+  },
+  {
+    "turn": 17,
+    "title": "農村部で若者が離村",
+    "choices": [
+      { "id": "A", "text": "農業教育と地元採用強化", "effect": { "green": 10, "blue": 5 } },
+      { "id": "B", "text": "都市での職業訓練を強化", "effect": { "yellow": 10, "green": -5 } }
+    ],
+    "penalty": {
+      "appearsOnTurn": 18,
+      "text": "大阪周辺で若年労働力不足が深刻化",
+      "effect": { "green": -10, "black": 5, "gap": 1 },
+      "region": "大阪"
+    }
+  },
+  {
+    "turn": 18,
+    "title": "大阪で“粉もんフェス”大盛況",
+    "choices": [
+      { "id": "A", "text": "各都市で類似イベント展開", "effect": { "yellow": 10, "green": 5 } },
+      { "id": "B", "text": "伝統とのバランスを保つ", "effect": { "green": 7, "red": 3, "yellow": -3 } }
+    ],
+    "penalty": {
+      "appearsOnTurn": 19,
+      "text": "東京で模倣イベント乱立、警察出動",
+      "effect": { "black": 8, "yellow": 5, "red": -3 },
+      "region": "東京"
+    }
+  },
+  {
+    "turn": 19,
+    "title": "札幌で冷害による不作",
+    "choices": [
+      { "id": "A", "text": "備蓄制度を強化", "effect": { "red": 10, "black": -3 } },
+      { "id": "B", "text": "品種改良と研究支援", "effect": { "blue": 10, "green": 5 } }
+    ],
+    "penalty": {
+      "appearsOnTurn": 20,
+      "text": "札幌のスーパーで食料品売り切れ続出",
+      "effect": { "black": 10, "green": -7, "blue": -2 },
+      "region": "札幌"
+    }
+  },
+  {
+    "turn": 20,
+    "title": "東京で冷蔵庫不足が深刻化",
+    "choices": [
+      { "id": "A", "text": "所有制限による統制", "effect": { "red": 10, "black": -2 } },
+      { "id": "B", "text": "民間輸入自由化", "effect": { "yellow": 10, "blue": 3, "black": 2 } }
+    ],
+    "penalty": {
+      "appearsOnTurn": 21,
+      "text": "食品腐敗で衛生問題続出",
+      "effect": { "black": 7, "blue": -5, "satisfaction": -8 },
+      "region": "東京"
+    }
+  },
+  {
+    "turn": 21,
+    "title": "長崎で伝統料理の継承者不足",
+    "choices": [
+      { "id": "A", "text": "継承制度を創設", "effect": { "blue": 10, "green": 5 } },
+      { "id": "B", "text": "全国で融合食として昇華", "effect": { "yellow": 10, "green": -3, "blue": 3 } }
+    ],
+    "penalty": {
+      "appearsOnTurn": 22,
+      "text": "長崎の郷土料理が消滅の危機",
+      "effect": { "blue": -8, "green": -5, "cultureLoss": 1 },
+      "region": "長崎"
+    }
+  },
+  {
+    "turn": 22,
+    "title": "各都市で“色の衝突”が激化",
+    "choices": [
+      { "id": "A", "text": "中央政府による調整", "effect": { "red": 10, "black": -5 } },
+      { "id": "B", "text": "自治都市制を導入", "effect": { "green": 10, "yellow": 5, "red": -5 } }
+    ],
+    "penalty": {
+      "appearsOnTurn": 23,
+      "text": "広島で色の対立が暴動に発展",
+      "effect": { "black": 15, "red": -5, "green": -5 },
+      "region": "広島"
+    }
+  },
+  {
+    "turn": 23,
+    "title": "食の安全基準が混乱",
+    "choices": [
+      { "id": "A", "text": "科学的に全国統一", "effect": { "blue": 10, "red": 3 } },
+      { "id": "B", "text": "地方の風土ごとに任せる", "effect": { "green": 10, "yellow": 5 } }
+    ],
+    "penalty": {
+      "appearsOnTurn": 24,
+      "text": "東京で輸入基準未整備による混乱",
+      "effect": { "yellow": -7, "black": 5, "blue": -3 },
+      "region": "東京"
+    }
+  },
+  {
+    "turn": 24,
+    "title": "黒市場で配給品の転売が横行",
+    "choices": [
+      { "id": "A", "text": "取締強化と統制の徹底", "effect": { "red": 10, "black": -5, "yellow": -3 } },
+      { "id": "B", "text": "民間流通を合法化", "effect": { "yellow": 10, "red": -5, "black": 3 } }
+    ],
+    "penalty": {
+      "appearsOnTurn": 25,
+      "text": "大阪で食料価格高騰と暴利流通が横行",
+      "effect": { "yellow": -8, "black": 10, "satisfaction": -5 },
+      "region": "大阪"
+    }
+  },
+  {
+    "turn": 25,
+    "title": "食文化観光が流行",
+    "choices": [
+      { "id": "A", "text": "観光庁と連携し食で外貨を稼ぐ", "effect": { "yellow": 10, "blue": 5 } },
+      { "id": "B", "text": "地元で完結する食生活に回帰", "effect": { "green": 10, "yellow": -5 } }
+    ],
+    "penalty": {
+      "appearsOnTurn": 26,
+      "text": "札幌の観光資源が他都市に奪われる",
+      "effect": { "yellow": -10, "green": -3, "gap": 1 },
+      "region": "札幌"
+    }
+  },
+  {
+    "turn": 26,
+    "title": "地方の農民が団結し協同組合を結成",
+    "choices": [
+      { "id": "A", "text": "国営農場と連携", "effect": { "red": 10, "green": 5 } },
+      { "id": "B", "text": "農協制度として支援", "effect": { "green": 10, "yellow": 3 } }
+    ],
+    "penalty": {
+      "appearsOnTurn": 27,
+      "text": "大阪の小規模農家が次々と廃業",
+      "effect": { "green": -10, "black": 5, "yellow": -3 },
+      "region": "大阪"
+    }
+  },
+  {
+    "turn": 27,
+    "title": "外国からファストフード産業が進出",
+    "choices": [
+      { "id": "A", "text": "国内資本に限定して参入", "effect": { "red": 10, "yellow": -3 } },
+      { "id": "B", "text": "規制緩和し競争を促す", "effect": { "yellow": 10, "black": 3, "green": -3 } }
+    ],
+    "penalty": {
+      "appearsOnTurn": 28,
+      "text": "東京で外資系チェーンの過剰出店が物議",
+      "effect": { "yellow": 5, "black": 7, "blue": -3 },
+      "region": "東京"
+    }
+  },
+  {
+    "turn": 28,
+    "title": "広島で食と平和をテーマに万博開催",
+    "choices": [
+      { "id": "A", "text": "全国から文化出展", "effect": { "blue": 10, "green": 5, "yellow": 5 } },
+      { "id": "B", "text": "軍事利用された食文化の展示", "effect": { "red": 10, "black": 3 } }
+    ],
+    "penalty": {
+      "appearsOnTurn": 29,
+      "text": "広島万博が分裂展示に",
+      "effect": { "black": 10, "blue": -5, "yellow": -3 },
+      "region": "広島"
+    }
+  },
+  {
+    "turn": 29,
+    "title": "満足度調査を全国で実施",
+    "choices": [
+      { "id": "A", "text": "不満地域に重点支援", "effect": { "green": 5, "blue": 5, "black": -5 } },
+      { "id": "B", "text": "満足度の高い地域を拡張モデルに", "effect": { "yellow": 10, "red": 3 } }
+    ],
+    "penalty": {
+      "appearsOnTurn": 30,
+      "text": "札幌で不公平感が爆発、一部住民が自治要求",
+      "effect": { "black": 10, "red": -3 },
+      "region": "札幌"
+    }
+  },
+  {
+    "turn": 30,
+    "title": "国家の再建完成。理想の食国家とは？",
+    "choices": [
+      { "id": "A", "text": "統制された秩序ある国", "effect": { "red": 15 } },
+      { "id": "B", "text": "自給自足と自然の国", "effect": { "green": 15 } },
+      { "id": "C", "text": "自由と経済の花咲く国", "effect": { "yellow": 15 } },
+      { "id": "D", "text": "教育と衛生で平和を築く国", "effect": { "blue": 15 } },
+      { "id": "E", "text": "多様性と調和の国", "effect": { "red": 5, "blue": 5, "green": 5, "yellow": 5, "black": -5 } }
+    ],
+    "penalty": {
+      "appearsOnTurn": 31,
+      "text": "長崎で国の食ビジョン未決定に抗議デモ",
+      "effect": { "black": 15, "satisfaction": -20, "evaluation": -1 },
+      "region": "長崎"
+    }
+  }
+]

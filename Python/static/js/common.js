@@ -1,50 +1,54 @@
 document.addEventListener("DOMContentLoaded", function () {
-    let storedSource = localStorage.getItem("selectedSource"); // 店舗選択のキー
+    let storedSource = localStorage.getItem("selectedSource");
     let sourceInput = document.getElementById("source_input");
+
     if (storedSource && sourceInput) {
-        sourceInput.value = storedSource; // 店舗選択の値を復元
+        sourceInput.value = storedSource;
     }
 });
 
 function startAndReset() {
-    fetch('/reset_session', { method: 'POST' }) // ✅ 先にリセット
-        .then(response => response.json())
-        .then(data => {
-            console.log("🔄 セッションがリセットされました！", data.character_demand);
-            document.getElementById("character_demand").textContent = data.character_demand; // ✅ 初期値を適用
-        })
-        .then(() => new Promise(resolve => setTimeout(resolve, 500))) // ✅ 遅延を少し長くする
-        .then(() => fetch('/start', { method: 'POST' })) // ✅ `start()` を実行
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById("character_demand").textContent = data.character_demand; // ✅ 新しい食べ物を適用
-            console.log("🔄 ゲーム開始！", data.character_demand);
-        })
-        .catch(error => console.error("❌ エラー: ", error));
-}
-function resetSession() {
+    alert("⭕➀スタートしました。\n🔔➁プロタグが何が欲しいか教えてくれるのを確認しよう！");
+
     fetch('/reset_session', { method: 'POST' })
         .then(response => response.json())
         .then(data => {
-            document.getElementById("character_demand").textContent = data.character_demand; // ✅ 初期値をUIに反映
-            console.log("🔄 セッションがリセットされました！", data.character_demand);
+            document.getElementById("character_demand").textContent = data.character_demand;
+        })
+        .then(() => new Promise(resolve => setTimeout(resolve, 500)))
+        .then(() => fetch('/start', { method: 'POST' }))
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("character_demand").textContent = data.character_demand;
+        })
+        .catch(error => console.error("❌ エラー: ", error));
+}
+
+function resetSession() {
+    alert("終了ボタンが押されました。\n🔔画面のリロードもお願いします！");
+
+    fetch('/reset_session', { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("character_demand").textContent = data.character_demand;
         })
         .catch(error => console.error("❌ エラー: ", error));
 }
 
 function person_fish() {
-    fetch('/contact_staff?source=fish', { method: 'GET' }) // ✅ `GET` のみを送信
+    fetch('/contact_staff?source=fish', { method: 'GET' })
         .then(response => response.text())
         .then(data => {
-            console.log("✅ 魚屋選択 (GET): ", data);
+            document.getElementById("selected_expert").textContent = data;
         })
         .catch(error => console.error("❌ Fetch error:", error));
 }
+
 function person_vegetables() {
-    fetch('/contact_staff?source=vegetables', { method: 'GET' }) // ✅ `GET` のみを送信
+    fetch('/contact_staff?source=vegetables', { method: 'GET' })
         .then(response => response.text())
         .then(data => {
-            console.log("✅ 八百屋選択 (GET): ", data);
+            document.getElementById("selected_expert").textContent = data;
         })
         .catch(error => console.error("❌ Fetch error:", error));
 }
