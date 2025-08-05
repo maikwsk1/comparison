@@ -16,45 +16,63 @@
             <div class="card shadow-sm border-0">
                 <div class="card-body text-center">
                     <!-- 🎯 タイトルは固定 -->
-                    <h2 class="card-title mb-4">👨‍🍳 料理長と会話中</h2>
 
+                    <% const hasMaterials=food_tree !=="未指定" || food_fish !=="未指定" || food_earth !=="未指定" || tool_house
+                        !=="未指定" ; %>
+                        <h2 class="card-title mb-4">👨‍🍳 料理長と会話中</h2>
 
+                        <% if (chef_cooking && hasMaterials) { %>
+                            <!-- ✅ 完成後表示 -->
+                            <div class="mb-3">
+                                <img src="/images/chef_cooking.png" width="200" height="200" alt="調理中">
+                            </div>
+                            <p class="mb-3">
+                                <%= chef_cooking %>
+                            </p>
 
-                    <% if (chef_cooking) { %>
-                        <!-- ✅ 完成時：専用イメージとメッセージ -->
-                        <div class="mb-3">
-                            <img src="/images/chef_cooking.png" width="200" height="200" alt="調理中">
-                        </div>
-                        <p class="mb-3">
-                            <%= chef_cooking %>
-                        </p>
-                        <% } else { %>
-                            <!-- 🧑‍🍳 通常時：料理長＆調理ボタン表示 -->
-                            <% if (chef_message) { %>
-                                <p class="mb-3">
-                                    <%= chef_message %>
-                                </p>
-                                <% } %>
+                            <% } else if (!hasMaterials) { %>
+                                <!-- 🆕 初期表示（素材ゼロ） -->
+                                <div class="mb-3">
+                                    <img src="/images/chef.png" width="200" height="200" alt="料理長">
+                                </div>
+                                <p class="mb-3">料理長です。材料を探して持ってきてください、調理します。</p>
 
-                                    <div class="mb-3">
-                                        <img src="/images/chef.png" width="200" height="200" alt="料理長">
-                                    </div>
-
-                                    <% if (completed_food) { %>
-                                        <form action="/cooking" method="POST" class="mb-4">
-                                            <button type="submit" class="btn btn-warning w-100">🍳
-                                                調理お願いします</button>
-                                        </form>
+                                <% } else { %>
+                                    <!-- 🍳 通常時（素材はあるが完成前） -->
+                                    <% if (chef_message) { %>
+                                        <p class="mb-3">
+                                            <%= chef_message %>
+                                        </p>
                                         <% } %>
-                                            <% } %>
-
-                                                <!-- 🏠 HOMEボタンは常時表示 -->
-                                                <div class="d-grid gap-2">
-                                                    <button type="button" class="btn btn-outline-secondary"
-                                                        onclick="window.location.href='/#contact'">
-                                                        🏠 HOMEに戻る
-                                                    </button>
-                                                </div>
+                                            <div class="mb-3">
+                                                <img src="/images/chef.png" width="200" height="200" alt="料理長">
+                                            </div>
+                                            <% if (completed_food) { %>
+                                                <form action="/cooking" method="POST" class="mb-4">
+                                                    <button type="submit" class="btn btn-warning w-100">🍳
+                                                        調理お願いします</button>
+                                                </form>
+                                                <% } %>
+                                                    <% } %>
+                                                        <!-- 🏠 HOMEボタン（表示分岐） -->
+                                                        <div class="d-grid gap-2 mt-3">
+                                                            <% if (chef_cooking && hasMaterials) { %>
+                                                                <!-- ✅ 完成画面で出す：リセットしてHOMEへ戻る -->
+                                                                <form action="/reset_chef_state" method="POST">
+                                                                    <button type="submit"
+                                                                        class="btn btn-outline-primary w-100">
+                                                                        🏠 HOMEに戻る
+                                                                    </button>
+                                                                </form>
+                                                                <% } else { %>
+                                                                    <!-- 🏠 通常HOMEボタン -->
+                                                                    <button type="button"
+                                                                        class="btn btn-outline-secondary w-100"
+                                                                        onclick="window.location.href='/#contact'">
+                                                                        🏠 HOMEに戻る
+                                                                    </button>
+                                                                    <% } %>
+                                                        </div>
 
                 </div>
             </div>

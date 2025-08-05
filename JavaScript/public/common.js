@@ -1,9 +1,10 @@
+//🕹️🚨🧩💡
 
-//円グラフ:ラベル・色・タイトル定義
+//💡円グラフのラベル・色・タイトル定義
 const colors = ['#007BFF', '#FF4136', '#FFDC00', '#333333', '#2ECC40'];
 const labels = ['教育（🔵）', '統制（🔴）', '経済（🟡）', '無秩序（⚫）', '農業（🟢）'];
 
-//都市ごとの円グラフの定義
+//💡都市ごとの円グラフの定義
 const chartTitles = {
     minato: "ミナト州",
     naniwa: "ナニワ自由州",
@@ -15,15 +16,15 @@ let initialCityData = {};
 const chartInstances = {};
 let dishData = {};
 
-//データをフロントエンドのJavScriptで活用するためのもの
+//💡データをフロントエンドのJavScriptで活用するためのもの
 fetch("/api/data")
     .then(res => res.json())
     .then(data => {
         cityData = data.cityData;
         dishData = data.dishData;
-        initialCityData = data.initialCityData; // ← ここで格納！
+        initialCityData = data.initialCityData;
 
-        drawCharts('current'); // 初期表示は現在スコア
+        drawCharts('current'); //初期表示は現在スコア
         updateCitySelector();
     });
 
@@ -36,7 +37,7 @@ async function loadDishData() {
         dishData = await res.json();
         updateCitySelector();
     } catch (err) {
-        console.error("🍱 dishData 読み込みエラー:", err);
+        console.error("dishData 読み込みエラー:", err);
     }
 }
 function updateCitySelector() {
@@ -47,24 +48,33 @@ function updateCitySelector() {
     const cityBox = document.getElementById("citySelectBox");
     if (cityBox) {
         cityBox.style.display = type === "color" ? "block" : "none";
+        console.log("🏙️ 都市選択フォーム:", cityBox.style.display);
     }
 }
 
-// 📊 思想スコアを都市別に描画
+//🕹️🚨🧩💡
+//💡非同期関数で、都市スコアを取得し、グラフ描画までをまとめて実行する。
+//"CityData"の円グラフ
 async function loadCityDataAndDrawCharts() {
     try {
+        //🕹️サーバーから都市ごとのスコアを取得。
+        //🧩"?_t=タイプスタンプ"をつけてキャッシュ(一度読んだファイルを一時的に保存すること)防止して、常に最新のデータを取得
         const res = await fetch("/data/cityData.json?_t=" + Date.now());
+
+        //🕹️取得したJSONデータ(テキスト)をオブジェクト(実際のプログラム内で使えるもの)に変換
         const cityData = await res.json();
 
+        //🕹️描画対象の都市リスト。それぞれに円グラフが表示される。
         const cities = ["minato", "naniwa", "kitano", "misaki", "shirasagi"];
 
+        //🕹️すべての都市に対して、順番にグラグを描画するループ処理
         cities.forEach(city => {
-            const id = city + "Chart";
-            const canvas = document.getElementById(id);
-            if (!canvas) return;
+            const id = city + "Chart";//グラフを描画するindex.cjsの<canvas>のID。
+            const canvas = document.getElementById(id);//HTML内の<canvas>要素を取得してグラフの描画領域を準備
+            if (!canvas) return;//🚨指定した<canvas>要素が見つからなかったら、その都市のグラフをスキップする
+            const ctx = canvas.getContext("2d");//"Canvas API"を使ってChart.jsが使えるようにする
 
-            const ctx = canvas.getContext("2d");
-
+            //🚨都市スコアがあれば使い、なければ空のスコアで初期化
             const scores = cityData[city] || {
                 blue: 0,
                 red: 0,
@@ -73,12 +83,14 @@ async function loadCityDataAndDrawCharts() {
                 green: 0
             };
 
+            //🚨すでにグラフが存在していた場合、一度廃棄して再描画し、二重描画を防ぐ
             if (chartInstances[city]) {
                 chartInstances[city].destroy();
             }
 
+            //🕹️"Chart.js"を使って円グラフを生成
             chartInstances[city] = new Chart(ctx, {
-                type: 'doughnut',
+                type: 'doughnut',//🧩ドーナツ型
                 data: {
                     labels,
                     datasets: [{
@@ -88,10 +100,11 @@ async function loadCityDataAndDrawCharts() {
                             scores.yellow,
                             scores.black,
                             scores.green
-                        ],
-                        backgroundColor: colors
+                        ],//🧩各種のスコア配列
+                        backgroundColor: colors////🧩色ごとの色設定
                     }]
                 },
+                //各都市ごとのタイトル表示
                 options: {
                     plugins: {
                         title: { display: true, text: chartTitles[city] },
@@ -126,7 +139,6 @@ function person_vegetables() {
         })
         .catch(error => console.error("❌ Fetch error:", error));
 }
-
 
 
 // 📊 描画関数：mode = 'initial' or 'current'
@@ -172,6 +184,7 @@ async function drawCharts(mode = 'current') {
     });
 }
 
+
 //円グラフを初期値にリセットする処理
 function handleReset() {
     return fetch('/reset_session', { method: 'POST' })
@@ -196,15 +209,34 @@ function restartAll() {
     });
 }
 
+fetch('/data/cityData.json')
+    .then(res => res.json())
+    .then(cityData => {
+        const scores = cityData["minato"]; // 都市選択を動的にしてもOK
+        const ctx = document.getElementById('effectChart').getContext('2d');
+
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: Object.keys(scores),
+                datasets: [{
+                    data: Object.values(scores),
+                    backgroundColor: ['red', 'blue', 'yellow', 'black', 'green']
+                }]
+            },
+            options: {
+                plugins: { legend: { position: 'bottom' } }
+            }
+        });
+    });
+
+
 document.addEventListener("DOMContentLoaded", () => {
     const storedSource = localStorage.getItem("selectedSource");
     const sourceInput = document.getElementById("source_input");
     if (storedSource && sourceInput) {
         sourceInput.value = storedSource;
     }
-
-    loadDishData();
-    drawCharts('current');
-
+    loadCityDataAndDrawCharts();
     document.getElementById("dish")?.addEventListener("change", updateCitySelector);
 });

@@ -1,7 +1,6 @@
 body {
-    padding: 30px;
-    font-family: sans-serif;
-    text-align: center;
+  font-family: sans-serif;
+  text-align: center;
 }
 .map-container {
   display: flex;
@@ -30,4 +29,12 @@ body {
   flex-wrap: nowrap;
   overflow-x: auto; /* 横スクロール許可するなら */
   gap: 20px;
+}
+#mapCanvas {
+  border: 2px solid #666;
+  background-color: #ffffff;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

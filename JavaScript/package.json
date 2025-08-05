@@ -12,5 +12,11 @@
   "description": "",
   "dependencies": {
     "axios": "^1.9.0"
+  },
+  "prettier": {
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": true,
+    "embeddedLanguageFormatting": "off"
   }
 }
