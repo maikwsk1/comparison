@@ -1,3 +1,4 @@
+
 //🕹️🚨🧩💡
 
 //💡STEP1:ライブラリの読み込み(外部と標準モジュール)
@@ -14,6 +15,8 @@ const fs = require("fs");
 const app = express();
 //基本ミドルウェア設定
 app.use(express.static(path.join(__dirname, "public")));
+app.use('/images', express.static(path.join(__dirname, '../assets/images')));
+
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
     secret: "your_secret_key",
@@ -24,19 +27,31 @@ app.use(session({
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
+
 //💡STEP3:初期データの定義
 //自作ファイルやデータ（JSON読み込み）
 const dishData = require("./public/data/dishData.json");//食べ物のデータ
 const cityData = require("./public/data/cityData.json");//都市のデータ(円グラフに描画）
 const newsPhases = require("./public/data/newsPhases.json");//ニュース
+
 //都市の思考スコアの初期値
 const initialCityData = {
-    minato: { blue: 40, red: 30, yellow: 20, black: 10, green: 0 },
-    naniwa: { yellow: 50, green: 20, blue: 20, black: 10, red: 0 },
-    shirasagi: { black: 40, red: 30, green: 20, blue: 10, yellow: 0 },
-    kitano: { green: 50, blue: 20, black: 20, yellow: 10, red: 0 },
-    misaki: { yellow: 40, blue: 30, black: 20, green: 10, red: 0 }
+    minato: { blue: 0, red: 0, yellow: 0, black: 0, green: 0 },
+    naniwa: { yellow: 0, green: 0, blue: 0, black: 0, red: 0 },
+    shirasagi: { black: 0, red: 0, green: 0, blue: 0, yellow: 0 },
+    kitano: { green: 0, blue: 0, black: 0, yellow: 0, red: 0 },
+    misaki: { yellow: 0, blue: 0, black: 0, green: 0, red: 0 }
 };
+
+//都市の思考スコアの初期値(値が最初からあるバージョン)
+//const initialCityData = {
+//    minato: { blue: 40, red: 30, yellow: 20, black: 10, green: 0 },
+//    naniwa: { yellow: 50, green: 20, blue: 20, black: 10, red: 0 },
+//    shirasagi: { black: 40, red: 30, green: 20, blue: 10, yellow: 0 },
+//    kitano: { green: 50, blue: 20, black: 20, yellow: 10, red: 0 },
+//    misaki: { yellow: 40, blue: 30, black: 20, green: 10, red: 0 }
+//};
+
 //"gameState"（進行状況）の初期値をひとまとめにして管理している
 const gameState = {
     currentTurn: 1,//現在のターン
@@ -64,18 +79,14 @@ app.use((req, res, next) => {
 //💡STEP5:データ送信用エンドポイント(Chart.jsなどが使う)
 //クライアント(Chart.js)に都市ごとの思想データの初期値（"req.session.gameState.cityData")をJSONとして送信する処理
 //"app.use"で取り込んで"app.get"で使うため順番を守らないといけない
-app.get("/data/cityData.json", (req, res) => {
-    res.json(req.session.city_data);
-});
-//フロント側が必要とするJSONデータをまとめて返すAPIエンドポイント
 app.get("/api/data", (req, res) => {
     res.json({
-        //データが無ければ{}（空）で返すことにより、エラーを回避
-        cityData: req.session.city_data || {},
+        cityData: req.session.gameState?.cityData || {},  // ← ゲームの進行に伴うスコア
         dishData: dishData || {},
         initialCityData: initialCityData
     });
 });
+
 
 //💡STEP6:リセット系POSTルート
 //リセット処理(円グラフの都市データ限定）
@@ -107,8 +118,13 @@ app.post("/reset_chef_state", (req, res) => {
 });
 
 
-//💡STEP7:各画面用GETルート
-//ルート
+// ファイル先頭付近に一度だけ書く（app起動時に読み込む）
+const recipeDataPath = path.join(__dirname, "public/data/recipe_hints.json");
+const recipeHintsRaw = JSON.parse(fs.readFileSync(recipeDataPath, "utf8")); // { "1": "...", "2": "...", ... }
+const allHints = Object.entries(recipeHintsRaw).map(([key, val]) => ({ id: key, text: val }));
+
+
+// ルートページのGET処理全文
 app.get("/", async (req, res) => {
     // まだゲームが開始されていないなら、初期データをセッションにコピー
     if (!req.session.gameState) {
@@ -135,6 +151,14 @@ app.get("/", async (req, res) => {
     const message = req.session.message;
     req.session.message = null;
 
+    // recipeHintsは、セッションに保存されたものがあればそれを渡し、なければ空配列
+    const recipeHints = req.session.selectedRecipeHints || [];
+    const allHintsUsedUp = req.session.allHintsUsedUp || false;
+
+    // セッションのヒントは表示後にクリアしておく（次回は表示されないように）
+    req.session.selectedRecipeHints = null;
+    req.session.allHintsUsedUp = false;
+
     // ✅ affectedCitiesRaw を追加
     const affectedCitiesRaw =
         penalty?.region === "全国"
@@ -154,9 +178,13 @@ app.get("/", async (req, res) => {
         dishData,
         selectedDishData,
         session: req.session,
+        recipeHints,
+        allHintsUsedUp,
+        recipeHintsRaw,
         message
     });
 });
+
 // 専門家の選択 (`GET /contact_staff`)
 app.get("/contact_staff", (req, res) => {
     const selectedSource = req.query.source || req.session.selectedSource;
@@ -165,8 +193,8 @@ app.get("/contact_staff", (req, res) => {
     let message = "❌ 順番が間違っています。先に専門家にレシピを聞いてください。";
     let message2 = "";
 
-    if (selectedSource === "fish") {
-        message = "🐟 魚の専門家です。何が欲しいのか、入力欄で教えてください！";
+    if (selectedSource === "rule") {
+        message = "ルールを説明します。わからない単語を、入力欄で教えてください！";
     } else if (selectedSource === "vegetables") {
         message = "🥦 野菜の専門家です。何が欲しいのか、入力欄で教えてください！";
     }
@@ -176,35 +204,53 @@ app.get("/contact_staff", (req, res) => {
 
 // 食べ物のリクエスト (`POST /contact_staff`)
 app.post("/contact_staff", (req, res) => {
-    const foodId = req.body.food_id;
-    req.session.food_id = foodId;
+    const item_id = req.body.item_id;
+    req.session.item_id = item_id;
 
     let message = "";
     let message2 = "";
+    let actionType = "";
+
+    // 共通の単語一覧（全専門家向け）
+    const actionMap = {
+        "行動のログ": "行動した記録を一時的に表示します。ユーザー自身が何を行ったのかを確認することが出来ます。",
+        "ターンニュース": "30ターンそれぞれにニュースが表示されます。AかBの政策を選びニュースに対する対策を取るか、政策を無視して、料理を作るヒントを得るかを選びます。（無視した場合は、次のターンでペナルティが起こります）",
+        "各都市の思想バランス": "5つの都市ごとに円グラフが表示されます。各思想ごとに政策や料理を反映することで値が変化していきます。",
+        "ゲームの目的": "このゲームの最終目標や達成条件について説明します。",
+        "料理の選択": "作った料理を反映させます。料理は二種類あり、ご当地料理と色の料理があります。",
+        "食材探索ゾーン": "海、山、地球、家から材料を集め、レシピを完成させます。",
+        "現在の持ち物": "料理を作る時に必要な材料や道具を確認できます。",
+    };
 
     if (!req.session.selectedSource) {
         message = "❌ 先に専門家にレシピを聞いてください。";
-    } else if (!foodId) {
-        message = "❌ 食べ物が選択されていません！";
-    } else if (req.session.selectedSource === "fish") {
-        if (foodId === "かまぼこ") {
-            message = "かまぼこが欲しいのなら、ヒラメと金槌を持ってきてね。";
-            message2 = "⭕ 正しい専門家を選択し、レシピを聞くことができました！";
+    } else if (!item_id) {
+        message = "❌ 調べたいもののワードが選択されていません！";
+    } else if (req.session.selectedSource === "rule") {
+        if (actionMap[item_id]) {
+            actionType = actionMap[item_id];
+            message = `🧭 ${item_id}は、${actionType}`;
+            message2 = "⭕ 正しい専門家を選択し、行動タイプを確認できました！";
         } else {
-            message = `申し訳ないですが、${foodId} は他の専門家に聞いてください。`;
+            message = `申し訳ないですが、${item_id} は他の専門家に聞いてください。`;
         }
     } else if (req.session.selectedSource === "vegetables") {
-        if (foodId === "焼きとうもろこし") {
-            message = "焼きとうもろこしが欲しいなら、とうもろこしとオーブンレンジを持ってきてね。";
+        if (item_id === "焼きとうもろこし") {
+            message = actionMap[item_id];
             message2 = "⭕ 正しい専門家を選択し、レシピを聞くことができました！";
         } else {
-            message = `申し訳ないですが、${foodId} は他の専門家に聞いてください。`;
+            message = `申し訳ないですが、${item_id} は他の専門家に聞いてください。`;
         }
     }
 
-    res.render("contact_staff", { message, message2, session: req.session });
+    res.render("contact_staff", {
+        message,
+        message2,
+        actionType,
+        actionMap,
+        session: req.session
+    });
 });
-
 app.post("/finding_things", (req, res) => {
 
     //フロント（フォームやボタン）から送信されたアイテム名
@@ -228,11 +274,15 @@ app.post("/finding_things", (req, res) => {
             req.session.message = "🌊 無事に漁獲できました。持ち物が追加されました！";
             break;
         case "earth":
-            req.session.food_earth = Array.from(new Set([
-                ...(Array.isArray(req.session.food_earth) ? req.session.food_earth : []),
-                ...selectedArray
-            ]));
-            req.session.message = "🌍 地球から素材をゲット！持ち物に追加されました。";
+            const currentEarth = Array.isArray(req.session.food_earth) ? req.session.food_earth : [];
+            const combinedEarth = Array.from(new Set([...currentEarth, ...selectedArray]));
+
+            if (combinedEarth.length > 3) {
+                req.session.message = "⚠️ 地球素材は最大3つまでです。リセットして選び直してください！";
+            } else {
+                req.session.food_earth = combinedEarth;
+                req.session.message = "🌍 地球から素材をゲット！持ち物に追加されました。";
+            }
             break;
         default:
             req.session.message = "❌ 不明な探索元です。";
@@ -242,6 +292,11 @@ app.post("/finding_things", (req, res) => {
     res.redirect("/finding_things");
 });
 
+app.post("/reset_earth", (req, res) => {
+    req.session.food_earth = [];
+    req.session.message = "♻️ 地球素材をリセットしました。もう一度選んでください！";
+    res.redirect("/finding_things?source=earth");
+});
 //森や海などで材料を選ぶ選択フォームの内容
 app.get("/finding_things", (req, res) => {
     //URLにある"?source=xxx"の値を取得。なければセッションの前回の値を使う。
@@ -324,50 +379,80 @@ app.get("/finding_things", (req, res) => {
     res.render("finding_things", { title, items, source, message, session: req.session });
 });
 
+app.get('/recipe-book', (req, res) => {
+    const completedDishes = req.session.completed_dishes || [];
+    const dishEmojis = {
+        "学校カレー": "🍛🧃",
+        "のり弁当風ご飯": "🍱🥢",
+        "濃口味噌汁": "🍲🌿",
+        "お好み焼き": "🥙🥬",
+        "串カツ": "🍖🍗",
+        "たこ焼き": "🐙",
+        "味噌ラーメン": "🍜",
+        "石狩鍋": "🍲🐟",
+        "スープカレー": "🍛🥕",
+        "トルコライス": "🍛🍗",
+        "皿うどん": "🍜🥦",
+        "しっぽくうどん": "🍜🥕🥔",
+        "シラサギ州のお好み焼き": "🥙🍅",
+        "もみじ饅頭": "🍁🥮",
+        "おこわ飯": "🍚🌰",
+        "配給乾パンセット": "🍞🥖",
+        "軍用レーションシチュー": "🥘🍖",
+        "軍用クラッカーセット": "🍪",
+        "給食の鯖の味噌煮": "🐟",
+        "牛乳ゼリーとコッペパン": "🥛🍞",
+        "栄養満点の野菜スープ": "🍲🥬",
+        "山菜おにぎり": "🍙🌿",
+        "地元野菜の蒸し物": "🥬🍠",
+        "野菜の炭火田楽": "🍢",
+        "屋台焼きそば": "🍝🦞",
+        "フェス用ホットドッグ": "🌭🧅",
+        "ブランド野菜のグリル": "🥗🍆"
+    };
+
+
+    res.render('recipe-book', { completedDishes, dishEmojis });
+});
+
+
+app.post("/complete_dish", (req, res) => {
+    const { dishName } = req.body;
+    if (!req.session.completed_dishes) {
+        req.session.completed_dishes = [];
+    }
+    if (!req.session.completed_dishes.includes(dishName)) {
+        req.session.completed_dishes.push(dishName);
+    }
+    req.session.completed_food = dishName; // 最新完成料理
+
+    res.redirect("/"); // 必要に応じて遷移先変更
+});
+
 //セッションへの料理登録とリダイレクト
 app.post("/select_dish", (req, res) => {
     req.session.completed_food = req.body.selected_dish;
     res.redirect("/");
-});
-
-//スコア調整関数（色の割合を再バランス)
-//都市の思想スコアの色の割合を調整するための処理で、合計が100を超えないように他の色を自動で分配・削減する仕組み。
-//🧩/apply_dishからの引数を使用してる。
+})
 function rebalanceCityScores(currentData, tags, delta) {
-
-    //🕹️操作対象の都市スコアをコピー（元データを壊さないように）
-    //🧩"currentData"は、変数:req.session.city_data[targetCity],//選ばれた都市のスコア(色ごとの数値)
+    // 元の都市スコアをコピー
     const cityScores = { ...currentData };
 
-    //🕹️"tag"に含まれる指定量を加算する。例)tag=["red"],dalta=10⇒redの値を10増やすのように。
+    // 指定されたタグに delta を加算または減算
     tags.forEach(tag => {
         cityScores[tag] = (cityScores[tag] || 0) + delta;
     });
 
-    //🕹️合計地が100を超えていたら、他の色から均等に引く
-    const total = Object.values(cityScores).reduce((sum, val) => sum + val, 0);
-    const excess = total - 100;
-
-    if (excess > 0) {
-        //🕹️増やした色以外に対して、余剰分を均等に減らす
-        const reduceTags = Object.keys(cityScores).filter(tag => !tags.includes(tag));
-        const perTag = reduceTags.length > 0 ? excess / reduceTags.length : 0;
-
-        //🕹️負の値にならないように"Math.max(0,...)で防ぐ
-        reduceTags.forEach(tag => {
-            cityScores[tag] = Math.max(0, cityScores[tag] - perTag);
-        });
-    }
-
-    //🕹️最終的な各スコアを四捨五入して返す
+    // 四捨五入
     Object.keys(cityScores).forEach(tag => {
         cityScores[tag] = Math.round(cityScores[tag]);
     });
 
-    console.log("🔧 rebalance 出力:", cityScores);
+    console.log("🔧 rebalance（制限なし）出力:", cityScores);
 
-    return cityScores;//🕹️調整された都市のスコアを返す
+    return cityScores;
 }
+
 
 //料理を都市に反映し、思想スコアに色を加え、グラフやUIに見えるように記録と更新をする。
 app.post("/apply_dish", (req, res) => {
@@ -614,7 +699,6 @@ app.post("/cooking", (req, res) => {
     return;
 });
 
-//スコア再調節関数(市の思想バランス補正)
 function rebalanceCityScoresWithEffect(currentData, effect) {
     const cityScores = { ...currentData };
 
@@ -622,44 +706,23 @@ function rebalanceCityScoresWithEffect(currentData, effect) {
     Object.entries(effect).forEach(([tag, change]) => {
         if (["red", "blue", "yellow", "black", "green"].includes(tag)) {
             const newValue = (cityScores[tag] || 0) + change;
-            cityScores[tag] = Math.max(0, newValue);
+            cityScores[tag] = Math.max(0, newValue);  // 0未満禁止
         }
     });
 
-    // ② 合計補正
-    let total = Object.values(cityScores).reduce((sum, val) => sum + val, 0);
-    const difference = total - 100;
+    // ↓ ここから合計調整処理を削除 ↓
+    // ② 合計補正（差分を他色から減らす）を行わない
 
-    if (difference !== 0) {
-        const adjustTags = Object.keys(cityScores).filter(tag => !(tag in effect));
-        const perTag = adjustTags.length > 0 ? difference / adjustTags.length : 0;
-
-        adjustTags.forEach(tag => {
-            cityScores[tag] = Math.max(0, cityScores[tag] - perTag); // 差を加減
-        });
-
-        // 再計算して誤差分調整（四捨五入前）
-        total = Object.values(cityScores).reduce((sum, val) => sum + val, 0);
-    }
-
-    // ③ 四捨五入
+    // ③ 四捨五入は残す
     Object.keys(cityScores).forEach(tag => {
         cityScores[tag] = Math.round(cityScores[tag]);
     });
 
-    // ④ 合計がズレた場合、最大値のタグに誤差分を足す
-    const roundedTotal = Object.values(cityScores).reduce((sum, val) => sum + val, 0);
-    const finalDiff = 100 - roundedTotal;
-
-    if (finalDiff !== 0) {
-        const maxTag = Object.keys(cityScores).reduce((a, b) =>
-            cityScores[a] > cityScores[b] ? a : b
-        );
-        cityScores[maxTag] += finalDiff;
-    }
+    // ④ 合計ズレ調整も削除（最後に100に合わす処理なし）
 
     return cityScores;
 }
+
 
 //都市の思想スコアを更新する関数
 //"tag"と"city"dishData.jsonにあり、それぞれの料理に対する前者は色を、後者は都市を指す。
@@ -749,25 +812,46 @@ app.post("/apply_news_choice", (req, res) => {
     res.redirect("/");
 });
 
-//政策無視処理(プレイヤーが選択せずにスキップした場合)
+
+
 app.post("/ignore-policy", (req, res) => {
     const turn = Number(req.body.turn);
 
     req.session.processedChoices = req.session.processedChoices || [];
     req.session.ignoredTurns = req.session.ignoredTurns || [];
-    req.session.message = null;
+    req.session.usedHintIds = req.session.usedHintIds || []; // 使ったヒントのIDリスト
 
     if (req.session.processedChoices.includes(turn)) {
         req.session.message = `ターン${turn}では既に選択済みのため、無視は反映されません。`;
         return res.redirect("/");
     }
 
-    // ✅ 無視として記録（両方必要！）
     req.session.processedChoices.push(turn);
     req.session.ignoredTurns.push(turn);
 
+    // まだ使っていないヒントを抽出
+    const unusedHints = allHints.filter(hint => !req.session.usedHintIds.includes(hint.id));
+
+    let selectedHints;
+    let allUsedUp = false;
+
+    if (unusedHints.length === 0) {
+        // 全て使い切っている場合
+        selectedHints = [];
+        allUsedUp = true;
+    } else {
+        // 未使用の中からランダムに最大3つ選択
+        const shuffled = unusedHints.sort(() => 0.5 - Math.random());
+        selectedHints = shuffled.slice(0, 3);
+        // 使ったヒントのIDを追加
+        req.session.usedHintIds.push(...selectedHints.map(h => h.id));
+    }
+
+    // セッションにセット
+    req.session.selectedRecipeHints = selectedHints.map(h => h.text);
+    req.session.allHintsUsedUp = allUsedUp;
+
     req.session.message = `🛑 政策を無視しました（ターン: ${turn}）`;
-    req.session.currentTurn = turn + 1;
 
     res.redirect("/");
 });
@@ -858,4 +942,3 @@ const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
-

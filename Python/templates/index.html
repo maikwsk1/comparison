@@ -13,228 +13,327 @@
         crossorigin="anonymous"></script>
 </head>
 
+
 <body>
-    <div id="view-container"></div>
-    <div class="container" style="max-width: 1200px;">
-        <div class="row">
-
-            <div class="col-3">
-                <div class="p-1 border-bottom border-secondary">
-                    <h2>概要</h2>
-                </div>
-                <!--ゲームの流れの説明-->
-                <div class="pt-2">
-                    <div><b>プロタグが食べたいもののために、材料を集めて料理し、与えるゲームです</b></div>
-                    <ol>
-                        <li><b>スタートボタン</b>を押してください</li>
-                        <li><b>プロタグ</b>が食べたいものを確認する</li>
-                        <li>その食べ物の専門家に<b>レシピを聞く</b></li>
-                        <li>指示どうりに<b>材料を集める</b></li>
-                        <li><b>料理長</b>に材料を渡し、調理してもらう</li>
-                        <li>完成した料理を<b>プロタグ</b>に渡す</li>
-                        <li>お礼を言われたら<b>クリア</b></li>
-                        <li><b>終了ボタン</b>を押してください</li>
-                    </ol>
-                </div>
-                <!-- 音声ファイル -->
-                <audio id="clickSound" src="/static/sound/クリック時の音.mp3"></audio>
-
-                <!-- スタート & 終了ボタン -->
-                <div class="p-3 mb-2 bg-body-tertiary">
-                    <button type="button" class="btn btn-danger"
-                        onclick="document.getElementById('clickSound').play(); startAndReset()">スタートボタン</button>
-                    <button type="button" class="btn btn-success"
-                        onclick="document.getElementById('clickSound').play(); resetSession()">終了ボタン</button>
-                </div>
-                <div><!--入力欄全て-->
-                    <div class="p-2 mb-1 .bg-body-tertiary">
-                        <div class="p-1 border-bottom border-secondary">
-                            <h4>入力欄</h4>
-                        </div>
-                        <div class="pt-2">
-                            <form method="POST" action="/contact_staff">
-                                <input type="hidden" name="source" id="source_input" class="form-label">
-                                <div class="d-flex align-items-center">
-                                    <input id="food_id" name="food_id" placeholder="食べ物の名前" type="text"
-                                        class="form-control form-control-sm w-50">
-                                    <button type="submit" class="btn btn-outline-danger btn-sm ms-2"
-                                        onclick="playSound()">送信</button>
-
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-9">
-                <div class="row d-flex justify-content-between p-1">
-                    <!-- プロタグ -->
-                    <div class="col-3 d-flex justify-content-center align-items-center">
-                        <h4 class="me-3">プロタグ</h4>
-                        <img src="static/images/character.png" width="100" height="100" />
-                    </div>
-
-                    <div class="col-3">
-                        <!--プロタグとの会話-->
-                        <div class="p-2 bg-body-tertiary">
-                            <div><b>➁プロタグが食べたいもの</b></div>
-                            <div id="character_demand">{{ session.get('character_demand') }}</div>
-                            <div class="pt-1"><b>完成した料理は？</b></div>
-                            <div>{{ session.get('completed_food', "なし") }}</div>
-                        </div>
-                    </div>
-
-                    <!-- プロタグの持ち物 -->
-                    <div class="col-3">
-                        <div class="p-3 bg-body-secondary">
-                            <div><b>現在の持ち物</b></div>
-                            <div><b>道具:</b>{{ session.get('tool_house', "なし") }}</div>
-                            <div><b>森の食材:</b>{{ session.get('food_tree', "なし") }}</div>
-                            <div><b>海の食材:</b>{{ session.get('food_fish', "なし") }}</div>
-                        </div>
-                    </div>
-
-                    <!-- 完成した料理 -->
-                    <div class="col-3">
-                        <div class="p-2 bg-body-tertiary">
-                            <div class="pb-1"><b>➅料理完成後にすること</b></div>
-                            <form method="POST" action="/clear" onsubmit="playSound()">
-                                <button type="submit" class="btn btn-warning btn-sm">作った料理をプロタグにあげる</button>
-                            </form>
-
-                            <div class="pt-2"><b>➆プロタグからの返答は？</b></div>
-                            <div>{{ session.get('result_message', "確定後に表示") }}</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="container pt-2 pb-3 px-4 bg-success-subtle">
-                    <!--地図の内容全て-->
-                    <div class="row d-flex">
-                        <div class="col-3">
-                            <div class="pt-5 mb-3 border-bottom border-secondary">
-                                <h2>地図</h2>
-                            </div>
-
-                            <!--地図で出来ることの説明文-->
-                            <div class="mt-2 pt-2 pb-2 bg-body-tertiary">
-                                <div id="map_ex">
-                                    <div><b>できることは何か？</b></div>
-                                    <div><b>➂レシピを聞く：</b>〇〇専門家をクリック</div>
-                                    <div><b>➃材料を集める：</b>森、海、プロタグの家へ</div>
-                                    <div><b>➄料理を作る：</b>料理長をクリック</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-6">
-                            <!--地図の内部全て(円と画像）-->
-                            <div id="square">
-                                <div>
-                                    <div class=sea_circle></div>
-                                    <div><img id="clownfish" src="static/images/clownfish.png" width="30" height="30" />
-                                    </div>
-                                    <div> <img id="tree2" src="static/images/tree2.png" width="70" height="70" />
-                                    </div>
-                                    <div><img id="tree3" src="static/images/tree3.png" width="70" height="70" />
-                                    </div>
-                                </div>
-                                <div class="map_circle"><!--地図の円を描く-->
-                                    <div class="circle1">
-                                        <div class="overlay-container">
-                                            <div class="overlay-circle1"></div>
-                                            <div class="overlay-circle1"></div>
-                                        </div>
-                                    </div>
-                                    <div class="circle1"></div>
-                                    <div class="circle1">
-                                        <div class="overlay-container">
-                                            <div class="overlay-circle2"></div>
-                                            <div class="overlay-circle2"></div>
-                                        </div>
-                                    </div>
-                                    <div class="circle1">
-                                        <div class="overlay-container">
-                                            <div class="overlay-circle3"></div>
-                                            <div class="overlay-circle3"></div>
-                                        </div>
-                                    </div>
-                                    <div class="circle1"></div>
-                                    <div class="circle1"></div>
-                                    <div class="circle1"></div>
-                                    <div class="circle1">
-                                        <div class="overlay-container">
-                                            <div class="overlay-circle4"></div>
-                                            <div class="overlay-circle4"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- 音声ファイル -->
-                                <audio id="clickSound" src="/static/sound/クリック時の音.mp3"></audio>
-
-                                <!-- 地図の画像を配置 -->
-                                <div id="square_image">
-                                    <div id="chef">
-                                        <div class="map_font">料理長</div>
-                                        <a href="/chef">
-                                            <img src="static/images/chef.png" onclick="playSound(); chef()" width="60"
-                                                height="60">
-                                        </a>
-                                    </div>
-                                    <div id="submarine">
-                                        <div class="map_font">海</div>
-                                        <a href="/finding_things?source=submarine">
-                                            <img src="static/images/submarine.png" onclick="playSound()" width="60"
-                                                height="60">
-                                        </a>
-                                    </div>
-                                    <div id="tree">
-                                        <div class="map_font">森</div>
-                                        <a href="/finding_things?source=tree">
-                                            <img src="static/images/tree.png" onclick="playSound()" width="60"
-                                                height="60">
-                                        </a>
-                                    </div>
-                                    <div id="house">
-                                        <div class="map_font">プロタグの家</div>
-                                        <a href="/finding_things?source=house">
-                                            <img src="static/images/house.png" onclick="playSound()" width="60"
-                                                height="60">
-                                        </a>
-                                    </div>
-                                    <div id="fish">
-                                        <div class="map_font">魚の専門家</div>
-                                        <a href="/contact_staff?source=fish">
-                                            <img src="static/images/person_fish.png"
-                                                onclick="playSound(); person_fish()" width="60" height="60">
-                                        </a>
-                                    </div>
-                                    <div id="vegetables">
-                                        <div class="map_font">野菜の専門家</div>
-                                        <a href="/contact_staff?source=vegetables">
-                                            <img src="static/images/person_vegetables.png"
-                                                onclick="playSound(); person_vegetables()" width="60" height="60">
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <!-- JavaScript -->
-                                <script>
-                                    function playSound() {
-                                        let audio = document.getElementById("clickSound");
-                                        audio.play();
-                                    }
-                                </script>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
+    <!-- すべてを囲むconrainer -->
+    <div class="container py-4">
+        <!-- 🔖 目次タブ -->
+        <div class=" mb-4 d-flex flex-wrap gap-2 justify-content-center">
+            <a href="#news" class="btn btn-outline-dark">📰 ニュース</a>
+            <a href="#charts" class="btn btn-outline-dark">📈 思想バランス</a>
+            <a href="#inventory" class="btn btn-outline-dark">🎒 持ち物</a>
+            <a href="#explore" class="btn btn-outline-dark">🪵 探索ゾーン</a>
         </div>
+
+        <!-- 🧍 専門家選択セクション -->
+        <div class="card border-0 text-center mb-4">
+            <div class="card-body">
+                <h4 class="mb-4">専門家を選んでください</h4>
+
+                <div class="row justify-content-center g-4">
+                    <!-- ルールアドバイザー -->
+                    <div class="col-md-4">
+                        <a href="{{ url_for('contact_staff', source='rule') }}" class="text-decoration-none">
+                            <img src="{{ url_for('custom_static', filename='images/rule.png') }}" width="200"
+                                height="200" class="img-fluid rounded shadow-sm mb-2" alt="ルールアドバイザー">
+                            <div class="map_font fw-bold">🧭 ルールアドバイザー</div>
+                            <p class="text-muted small">政策や行動の選択についてアドバイスします。</p>
+                        </a>
+                    </div>
+
+                    <!-- 野菜の専門家 -->
+                    <div class="col-md-4">
+                        <a href="{{ url_for('contact_staff', source='vegetable') }}" class="text-decoration-none">
+                            <div style="height: 50px; width: 150px;"></div>
+                            <img src="{{ url_for('custom_static', filename='images/princess.png') }}" width="150"
+                                height="150" class="img-fluid rounded shadow-sm mb-2" alt="主人公">
+                            <div class="map_font fw-bold">🥕 野菜の専門家</div>
+                            <p class="text-muted small">野菜の育て方や収穫のタイミングをアドバイスします。</p>
+                        </a>
+                    </div>
+
+                    <!-- 料理の専門家 -->
+                    <div class="col-md-4">
+                        <a href="{{ url_for('contact_staff', source='cooking') }}" class="text-decoration-none">
+                            <img src="{{ url_for('custom_static', filename='images/chef2.png') }}" width="200"
+                                height="200" class="img-fluid rounded shadow-sm mb-2" alt="料理の専門家">
+                            <div class="map_font fw-bold">🍳 料理の専門家</div>
+                            <p class="text-muted small">食材の組み合わせや調理方法をアドバイスします。</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 mb-4">
+            <button class="btn btn-danger fs-5" onclick="handleReset()">🔁 初期化して再スタート</button>
+            <button class="btn btn-danger fs-5" onclick="restartAll()">🔁 ニュース最初から</button>
+        </div>
+        <a href="/recipe-book" class="btn btn-danger my-3 fs-5">📖 レシピ図鑑を見る</a>
+        <div class="p-3 bg-light rounded shadow-sm">
+            <h3 class="text-dark mb-4 fs-3">📜 行動のログ</h3>
+            <div class="card border mb-4 bg-light shadow-sm">
+                <div class="card-body fs-6">
+                    <% if (session.message) { %>
+                        <p class="text-muted">
+                            <%= session.message %>
+                        </p>
+                        <% session.message=null; %>
+                            <% } %>
+                                <% if (message) { %>
+                                    <div class="bg-light p-3 border rounded fs-6">
+                                        <pre class="mb-0"><%= message %></pre>
+                                    </div>
+                                    <% } %>
+                </div>
+            </div>
+        </div>
+        <div class="p-3 bg-light rounded shadow-sm">
+            <h3 class="mb-1 fs-3">📰 ターンニュース</h3>
+            <h5 class="text-dark mb-4 fs-5">ターン <%= turn %>: <%= news?.title || "イベント終了" %>
+            </h5>
+
+            <div class="card border mb-4 bg-light" id="news">
+                <div class="card-body fs-6">
+                    <form method="POST" action="/next-turn" class="mb-3">
+                        <input type="hidden" name="currentTurn" value="<%= turn %>" />
+                        <button type="submit" class="btn btn-primary w-100 fs-5">▶️ 次のターンへ進む</button>
+                    </form>
+
+                    <% const isLocked=session.processedChoices?.includes(turn); %>
+                        <% if (news && news.choices) { %>
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                <% news.choices.forEach(choice=> { %>
+                                    <form method="POST" action="/apply_news_choice" class="d-inline">
+                                        <input type="hidden" name="turn" value="<%= turn %>" />
+                                        <button type="submit" name="choice" value="<%= choice.id %>"
+                                            class="btn btn-warning text-white fs-6" <% if (isLocked) { %> disabled <% }
+                                                %>>
+                                                <%= choice.id %>: <%= choice.text %>
+                                        </button>
+                                    </form>
+                                    <% }); %>
+                            </div>
+                            <% } else { %>
+                                <p class="fs-6">このターンには選択肢のあるニュースはありません。</p>
+                                <% } %>
+
+                                    <form method="POST" action="/ignore-policy">
+                                        <input type="hidden" name="newsId" value="<%= news?.id %>" />
+                                        <input type="hidden" name="turn" value="<%= turn %>" />
+                                        <button type="submit" class="btn btn-secondary w-100 fs-5" <% if (isLocked) { %>
+                                            disabled <% } %>>
+                                                🚫 政策を無視する
+                                        </button>
+                                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="p-3 bg-light rounded shadow-sm">
+            <h3 class="text-dark mb-4 fs-3">📈 各都市の思想バランス</h3>
+            <div class="card border bg-light" id="charts">
+                <div class="card-body bg-white fs-6">
+                    <div class="mb-3 text-center text-muted fs-6">
+                        <strong class="text-dark fs-5">🧭 思想カテゴリ：</strong>
+                        <span style="color:#007BFF">🔵 教育</span> ／
+                        <span style="color:#FF4136">🔴 統制</span> ／
+                        <span style="color:#FFDC00">🟡 経済</span> ／
+                        <span style="color:#333333">⚫ 無秩序</span> ／
+                        <span style="color:#2ECC40">🟢 農業</span>
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-2 justify-content-center mb-3">
+                        <button class="btn btn-outline-primary fs-6" onclick="drawCharts('current')">🌀 現在のスコア</button>
+                        <button class="btn btn-outline-secondary fs-6" onclick="drawCharts('initial')">🔁 初期スコア</button>
+                    </div>
+
+                    <div id="regionRoot" data-affected='<%- JSON.stringify(affectedCitiesRaw) %>'></div>
+
+                    <div class="chart-container">
+                        <div class="col chart-box"><canvas id="minatoChart" width="300" height="300"></canvas></div>
+                        <div class="col chart-box"><canvas id="naniwaChart" width="300" height="300"></canvas></div>
+                        <div class="col chart-box"><canvas id="kitanoChart" width="300" height="300"></canvas></div>
+                        <div class="col chart-box"><canvas id="misakiChart" width="300" height="300"></canvas></div>
+                        <div class="col chart-box"><canvas id="shirasagiChart" width="300" height="300"></canvas></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🍛 料理選択フォーム -->
+        <%- include("partials/dish_form", { session: session, selectedDish: selectedDish, selectedDishData:
+            selectedDishData, dishData: dishData, completed_food: completed_food }) %>
+            <div class="p-3 bg-light rounded shadow-sm">
+                <h3 id="explore">🪵 食材探索ゾーン</h3>
+
+                <!-- 1列目：海と森 -->
+                <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
+
+                    <div class="col text-center">
+                        <a href="{{ url_for('finding_things', source='submarine') }}"
+                            class="text-decoration-none text-dark">
+                            <div class="p-3 bg-white border rounded">
+                                <div class="fw-bold mb-2 fs-4">🌊 水産資源群</div>
+                                <div class="text-muted mb-3">魚介・海藻・出汁素材など</div>
+                                <img src="{{ url_for('custom_static', filename='images/sea.jpg') }}"
+                                    style="height: 320px; max-width: 100%; object-fit: contain; display: block; margin: auto;"
+                                    alt="海の探索アイコン">
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col text-center">
+                        <a href="{{ url_for('finding_things', source='tree') }}" class="text-decoration-none text-dark">
+                            <div class="p-3 bg-white border rounded">
+                                <div class="fw-bold mb-2 fs-4">🌲 山間部植物資源群</div>
+                                <div class="text-muted mb-3">山菜・根菜・乾物素材など</div>
+                                <img src="{{ url_for('custom_static', filename='images/tree.jpg') }}"
+                                    style="height: 320px; max-width: 100%; object-fit: contain; display: block; margin: auto;"
+                                    alt="森の探索アイコン">
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+
+                <!-- 2列目：シェフ・地球・家 -->
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+
+                    <div class="col text-center">
+                        <a href="{{ url_for('chef') }}" class="text-decoration-none text-dark">
+                            <div class="p-3 bg-white border rounded">
+                                <div class="fw-bold mb-2 fs-4">📋 レシピ監修官</div>
+                                <div class="text-muted mb-3">調理進行と文化の補助案内</div>
+                                <img src="{{ url_for('custom_static', filename='images/chef.png') }}"
+                                    style="height: 280px; max-width: 100%; object-fit: contain; display: block; margin: auto;"
+                                    alt="調理ガイド・レシピ監修官のアイコン">
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col text-center">
+                        <a href="{{ url_for('finding_things', source='house') }}"
+                            class="text-decoration-none text-dark">
+                            <div class="p-3 bg-white border rounded">
+                                <div class="fw-bold mb-2 fs-4">🏠 家庭内調理器具群</div>
+                                <div class="text-muted mb-3">鍋・鉄板・フライ器など</div>
+                                <img src="{{ url_for('custom_static', filename='images/house.jpg') }}"
+                                    style="height: 280px; max-width: 100%; object-fit: contain; display: block; margin: auto;"
+                                    alt="家庭内調理器具アイコン">
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col text-center">
+                        <a href="{{ url_for('finding_things', source='earth') }}"
+                            class="text-decoration-none text-dark">
+                            <div class="p-3 bg-white border rounded">
+                                <div class="fw-bold mb-2 fs-4">🧂 調味構成基盤群</div>
+                                <div class="text-muted mb-3">味噌・出汁・粉類・スパイスなど</div>
+                                <img src="{{ url_for('custom_static', filename='images/earth.jpg') }}"
+                                    style="height: 280px; max-width: 100%; object-fit: contain; display: block; margin: auto;"
+                                    alt="調味素材ゾーンのアイコン">
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-3 bg-light rounded shadow-sm">
+                <h3 class="mb-3 mt-5 fs-3" id="inventory">🎒 現在の持ち物</h3>
+
+                <div class="d-flex flex-wrap gap-2 justify-content-between">
+                    <!-- 家の道具 -->
+                    <div class="border rounded p-3 bg-white flex-grow-1" style="min-width: 250px;">
+                        <h6 class="fs-5">🏠 家庭内調理器具</h6>
+                        <p class="mb-1 text-muted fs-6"><small>鍋・鉄板・フライ器など</small></p>
+                        <div class="fs-5">
+                            {% set tools = session.get('tool_house') %}
+                            {% if tools %}
+                            {% if tools is iterable and tools is not string %}
+                            {% for item in tools %}
+                            <div>{{ item }}</div>
+                            {% endfor %}
+                            {% else %}
+                            <div>{{ tools }}</div>
+                            {% endif %}
+                            {% else %}
+                            <div>なし</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- 森の食材 -->
+                    <div class="border rounded p-3 bg-white flex-grow-1" style="min-width: 250px;">
+                        <h6 class="fs-5">🌲 山間部植物素材</h6>
+                        <p class="mb-1 text-muted fs-6"><small>山菜・根菜・乾物など</small></p>
+                        <div class="fs-5">
+                            {% set tree = session.get('food_tree') %}
+                            {% if tree %}
+                            {% if tree is iterable and tree is not string %}
+                            {% for item in tree %}
+                            <div>{{ item }}</div>
+                            {% endfor %}
+                            {% else %}
+                            <div>{{ tree }}</div>
+                            {% endif %}
+                            {% else %}
+                            <div>なし</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- 海の食材 -->
+                    <div class="border rounded p-3 bg-white flex-grow-1" style="min-width: 250px;">
+                        <h6 class="fs-5">🌊 水産資源素材</h6>
+                        <p class="mb-1 text-muted fs-6"><small>魚介・海藻・魚出汁など</small></p>
+                        <div class="fs-5">
+                            {% set fish = session.get('food_fish') %}
+                            {% if fish %}
+                            {% if fish is iterable and fish is not string %}
+                            {% for item in fish %}
+                            <div>{{ item }}</div>
+                            {% endfor %}
+                            {% else %}
+                            <div>{{ fish }}</div>
+                            {% endif %}
+                            {% else %}
+                            <div>なし</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- 地の素材 -->
+                    <div class="border rounded p-3 bg-white flex-grow-1" style="min-width: 250px;">
+                        <h6 class="fs-5">🧂 調味構成基盤素材</h6>
+                        <p class="mb-1 text-muted fs-6"><small>味噌・出汁・粉類・スパイス等</small></p>
+                        <div class="fs-5">
+                            {% set earth = session.get('food_earth') %}
+                            {% if earth %}
+                            {% if earth is iterable and earth is not string %}
+                            {% for item in earth %}
+                            <div>{{ item }}</div>
+                            {% endfor %}
+                            {% else %}
+                            <div>{{ earth }}</div>
+                            {% endif %}
+                            {% else %}
+                            <div>なし</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
     </div>
+
+
+    <!-- ↓この順番が超重要:JavaScriptの取り込み・chart.jsの取り込み（グラフを描画できる） -->
+    <!-- Chart.js 本体 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Chart.js Plugin for DataLabels -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <script src="/common.js"></script>
 
 </body>
 

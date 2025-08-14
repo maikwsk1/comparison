@@ -1,0 +1,159 @@
+[33mcommit be737a0453fc11cdbfdcc7b4957b5c734d4d37ab[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Wed Aug 6 00:31:59 2025 +0900
+
+    style: UIの外観調整（アイコンの位置と余白を整理）
+
+[33mcommit dd832a6a1e1e8523f0781dccf7522db40693a8f1[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Sat Jul 5 02:26:36 2025 +0900
+
+    Feat:JavaScriptを追加
+
+[33mcommit 58b010772791eb905f48bce1f6ca870c66f383b0[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Tue May 27 18:10:35 2025 +0900
+
+    Feat:実装完了・機能動作が安定
+
+[33mcommit 253e38d9f0b1d41921f68288ce222a6a3d97d7de[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Tue Apr 29 01:39:58 2025 +0900
+
+    Feat: chefの動作を追加
+
+[33mcommit ecf91888ef7e161928b262015a69ed45643dfeff[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Mon Apr 28 20:35:14 2025 +0900
+
+    Fix: Sessionでの値の保存成功
+
+[33mcommit 0c04a1dbe784eaf01023fb10400d1bcb6e717894[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Fri Apr 25 12:48:57 2025 +0900
+
+    Feat: フォーム送信データの画面遷移後の保持を実装
+
+[33mcommit 36e47e487311b78a1d35148d11590562f1927e27[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Tue Apr 22 17:15:28 2025 +0900
+
+    Prototype: データ永続化の試作実装
+
+[33mcommit aded980ca8e282e98ab97557f63f14b94a172a1a[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Tue Apr 15 14:30:07 2025 +0900
+
+    Add files via upload
+
+[33mcommit c9bad2dc22d3a1e959fd6329cb67c51ccb2860ed[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Tue Apr 15 14:28:26 2025 +0900
+
+    Initial commit
+[33mcommit be737a0453fc11cdbfdcc7b4957b5c734d4d37ab[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Wed Aug 6 00:31:59 2025 +0900
+
+    style: UIの外観調整（アイコンの位置と余白を整理）
+
+[33mcommit dd832a6a1e1e8523f0781dccf7522db40693a8f1[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Sat Jul 5 02:26:36 2025 +0900
+
+    Feat:JavaScriptを追加
+
+[33mcommit 58b010772791eb905f48bce1f6ca870c66f383b0[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Tue May 27 18:10:35 2025 +0900
+
+    Feat:実装完了・機能動作が安定
+
+[33mcommit 253e38d9f0b1d41921f68288ce222a6a3d97d7de[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Tue Apr 29 01:39:58 2025 +0900
+
+    Feat: chefの動作を追加
+
+[33mcommit ecf91888ef7e161928b262015a69ed45643dfeff[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Mon Apr 28 20:35:14 2025 +0900
+
+    Fix: Sessionでの値の保存成功
+
+[33mcommit 0c04a1dbe784eaf01023fb10400d1bcb6e717894[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Fri Apr 25 12:48:57 2025 +0900
+
+    Feat: フォーム送信データの画面遷移後の保持を実装
+
+[33mcommit 36e47e487311b78a1d35148d11590562f1927e27[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Tue Apr 22 17:15:28 2025 +0900
+
+    Prototype: データ永続化の試作実装
+
+[33mcommit aded980ca8e282e98ab97557f63f14b94a172a1a[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Tue Apr 15 14:30:07 2025 +0900
+
+    Add files via upload
+
+[33mcommit c9bad2dc22d3a1e959fd6329cb67c51ccb2860ed[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Tue Apr 15 14:28:26 2025 +0900
+
+    Initial commit
+[33mcommit be737a0453fc11cdbfdcc7b4957b5c734d4d37ab[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Wed Aug 6 00:31:59 2025 +0900
+
+    style: UIの外観調整（アイコンの位置と余白を整理）
+
+[33mcommit dd832a6a1e1e8523f0781dccf7522db40693a8f1[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Sat Jul 5 02:26:36 2025 +0900
+
+    Feat:JavaScriptを追加
+
+[33mcommit 58b010772791eb905f48bce1f6ca870c66f383b0[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Tue May 27 18:10:35 2025 +0900
+
+    Feat:実装完了・機能動作が安定
+
+[33mcommit 253e38d9f0b1d41921f68288ce222a6a3d97d7de[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Tue Apr 29 01:39:58 2025 +0900
+
+    Feat: chefの動作を追加
+
+[33mcommit ecf91888ef7e161928b262015a69ed45643dfeff[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Mon Apr 28 20:35:14 2025 +0900
+
+    Fix: Sessionでの値の保存成功
+
+[33mcommit 0c04a1dbe784eaf01023fb10400d1bcb6e717894[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Fri Apr 25 12:48:57 2025 +0900
+
+    Feat: フォーム送信データの画面遷移後の保持を実装
+
+[33mcommit 36e47e487311b78a1d35148d11590562f1927e27[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Tue Apr 22 17:15:28 2025 +0900
+
+    Prototype: データ永続化の試作実装
+
+[33mcommit aded980ca8e282e98ab97557f63f14b94a172a1a[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Tue Apr 15 14:30:07 2025 +0900
+
+    Add files via upload
+
+[33mcommit c9bad2dc22d3a1e959fd6329cb67c51ccb2860ed[m
+Author: maikwsk1 <148402850+maikwsk1@users.noreply.github.com>
+Date:   Tue Apr 15 14:28:26 2025 +0900
+
+    Initial commit

@@ -1,46 +1,61 @@
-<!DOCTYPE html><!--HTML5-->
+<!DOCTYPE html>
 <html lang="ja">
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="/style.css">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-<script src="{{ url_for('static', filename='js/common.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-    crossorigin="anonymous"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="/common.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
 </head>
 
-<body>
-    <div class="col-4">
-        <h2>専門家の意見</h2>
-        <p>
-            <%= message %>
-        </p>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">専門家の意見</h2>
 
-        <% if (message2) { %>
-            <div class="alert alert-success">
-                <%= message2 %>
+                        <p class="text-black">
+                            <%= message %>
+                        </p>
+
+                        <div class="text-center mb-4">
+                            <% if (session.selectedSource==="rule" ) { %>
+                                <img src="images/rule.png" class="img-fluid mb-2" style="max-height: 200px;"
+                                    alt="魚の専門家">
+                                <p class="text-muted">入力単語一覧：ターンニュース、行動のログ、料理の選択</p>
+                                <% } else if (session.selectedSource==="vegetables" ) { %>
+                                    <img src="images/person_vegetables.png" class="img-fluid mb-2"
+                                        style="max-height: 200px;" alt="野菜の専門家">
+                                    <p class="text-muted">🥬 野菜の専門家向け単語一覧：食材探索ゾーン、現在の持ち物、各都市の思想バランス</p>
+                                    <% } %>
+                        </div>
+
+                        <h5 class="mb-3">知りたいものを入力してください</h5>
+                        <form action="/contact_staff" method="post" class="mb-4">
+                            <div class="input-group">
+                                <input type="text" name="item_id" class="form-control" placeholder="単語を入力">
+                                <button type="submit" class="btn btn-primary">送信</button>
+                            </div>
+                        </form>
+
+                        <div class="text-end mt-4">
+                            <button type="button" class="btn btn-outline-secondary"
+                                onclick="window.location.href='/#home'">
+                                HOMEに戻る
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <% } %>
-
-                <% if (session.selectedSource==="fish" ) { %>
-                    <img src="images/person_fish.png" width="200" height="200">
-                    <% } else if (session.selectedSource==="vegetables" ) { %>
-                        <img src="images/person_vegetables.png" width="200" height="200">
-                        <% } %>
-
-                            <h3>食べたいものを入力してください</h3>
-                            <form action="/contact_staff" method="post">
-                                <input type="text" name="food_id" placeholder="食べ物を入力">
-                                <button type="submit">送信</button>
-                            </form>
-
-                            <div><button type="button" class="btn btn-outline-primary"
-                                    onclick="window.location.href='/#home'">HOMEに戻る</button></div>
+        </div>
     </div>
-
 </body>
 
 </html>

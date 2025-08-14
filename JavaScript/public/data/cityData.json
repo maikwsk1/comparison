@@ -1,37 +1,37 @@
 {
   "minato": {
-    "blue": 36,
-    "red": 37,
-    "yellow": 14,
-    "black": 3,
-    "green": 10
+    "blue": 0,
+    "red": 10,
+    "yellow": 0,
+    "black": 0,
+    "green": 0
   },
   "naniwa": {
-    "yellow": 46,
-    "green": 30,
-    "blue": 16,
-    "black": 8,
+    "yellow": 0,
+    "green": 0,
+    "blue": 0,
+    "black": 0,
     "red": 0
   },
   "shirasagi": {
-    "black": 40,
-    "red": 30,
-    "green": 20,
-    "blue": 10,
+    "black": 0,
+    "red": 0,
+    "green": 0,
+    "blue": 0,
     "yellow": 0
   },
   "kitano": {
-    "green": 50,
-    "blue": 20,
-    "black": 20,
-    "yellow": 10,
+    "green": 0,
+    "blue": 0,
+    "black": 0,
+    "yellow": 0,
     "red": 0
   },
   "misaki": {
-    "yellow": 40,
-    "blue": 30,
-    "black": 20,
-    "green": 10,
+    "yellow": 0,
+    "blue": 0,
+    "black": 0,
+    "green": 0,
     "red": 0
   }
 }

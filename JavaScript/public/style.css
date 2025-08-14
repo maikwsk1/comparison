@@ -38,3 +38,12 @@ body {
   justify-content: center;
   align-items: center;
 }
+.emoji {
+  display: inline-block;
+  vertical-align: middle;
+  /* すでにfont-sizeをinline指定しているので、必要に応じて調整してください */
+}
+.dish-name {
+  vertical-align: middle;
+  font-size: 1.2em;
+}

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>過去に作った料理図鑑</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css" />
+    <style>
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            /* 横3列固定 */
+            gap: 1rem;
+            list-style: none;
+            padding: 0;
+        }
+
+        .dish-card {
+            background-color: #f8f9fa;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            height: 160px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .emoji {
+            font-size: 64px;
+            margin-bottom: 0.5rem;
+        }
+
+        .dish-name {
+            font-size: 0.9rem;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body class="container py-4">
+    <h2 class="text-center mt-5 mb-5">🍳過去に作った料理</h2>
+
+    <% if (completedDishes.length> 0) { %>
+        <ul class="card-grid">
+            <% completedDishes.forEach(dish=> { %>
+                <li class="dish-card">
+                    <span class="emoji">
+                        <%= dishEmojis[dish] || "🍽️" %>
+                    </span>
+                    <span class="dish-name">
+                        <%= dish %>
+                    </span>
+                </li>
+                <% }) %>
+        </ul>
+        <% } else { %>
+            <p>まだ完成した料理はありません。</p>
+            <% } %>
+                <div class="text-end mt-4">
+                    <a href="/" class="btn btn-danger">ゲーム画面に戻る</a>
+                </div>
+</body>
+
+</html>

@@ -43,10 +43,20 @@
                                             </option>
                                             <% }) %>
                                     </select>
+                                    <!-- ✅ 決定ボタンのすぐ下 -->
                                     <div class="text-end">
                                         <button type="submit" class="btn btn-warning">✅ 決定</button>
                                     </div>
                                 </form>
+
+                                <!-- ✅ ここに追加 -->
+                                <% if (source==="earth" ) { %>
+                                    <form method="POST" action="/reset_earth">
+                                        <button type="submit" class="btn btn-outline-danger w-100 mt-2">
+                                            ♻️ 地球素材をリセットする
+                                        </button>
+                                    </form>
+                                    <% } %>
                             </div>
                             <div class="d-grid gap-2 mt-4">
                                 <a href="/" class="btn btn-outline-danger">🏠 HOMEに戻る</a>

@@ -288,8 +288,7 @@
     "type": "color",
     "tags": ["yellow", "blue"],
     "conditions": {
-      "food_earth": "パン",
-      "food_tree": "ソーセージ",
+      "food_earth": ["パン", "ソーセージ"],
       "tool_house": "鉄板"
     },
     "message": "ホットドッグ、フェス準備中。焼き目が最高！"
